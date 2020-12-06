@@ -2,13 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8d26ef2d-58f1-4473-ac8b-929d62b7ca37" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/pkg/api/ImageMixin.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/pkg/api/api_handler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/pkg/api/device_mixin.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/pkg/api/display_mixin.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/pkg/enum/image_enum.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/pkg/network/rest_handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/examples/basic_usage.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/app/api_handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/internal/pkg/api/auth_mixin.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pkg/camera.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/pkg/api/ImageMixin.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/pkg/api/image_mixin.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/pkg/api/api_handler.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/pkg/api/device_mixin.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/pkg/api/device_mixin.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/pkg/api/display_mixin.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/pkg/api/display_mixin.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/pkg/network/rest_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/pkg/network/rest_handler.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,12 +45,13 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="go" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Oleaintueri/OneCloudAssets-go" />
+    <property name="settings.editor.selected.configurable" value="MTConfigurable" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/internal/app" />
       <recent name="$PROJECT_DIR$/internal/pkg" />
     </key>
   </component>
@@ -66,5 +71,21 @@
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2722" y="375" width="400" height="325" key="#Go_Modules/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1607172688274" />
+    <state x="743" y="298" width="424" height="482" key="FileChooserDialogImpl" timestamp="1607271616111">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="743" y="298" width="424" height="482" key="FileChooserDialogImpl/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1607271616111" />
+    <state x="456" y="175" key="SettingsEditor" timestamp="1607269313490">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="456" y="175" key="SettingsEditor/1920.0.1920.1080/0.27.1920.1053@0.27.1920.1053" timestamp="1607269313490" />
+    <state x="146" y="94" width="1647" height="803" key="dock-window-1" timestamp="1607276752816">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="146" y="94" width="1647" height="803" key="dock-window-1/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1607276752816" />
+    <state x="34" y="0" width="1647" height="792" maximized="true" key="dock-window-2" timestamp="1607278437112">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="34" y="0" width="1647" height="792" maximized="true" key="dock-window-2/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1607278437112" />
   </component>
 </project>
