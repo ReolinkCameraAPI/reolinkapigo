@@ -3,7 +3,9 @@ package network
 import (
 	"bytes"
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 )
@@ -27,6 +29,11 @@ type RestHandler struct {
 	Endpoint string
 	Proxy    *RestHandlerProxy
 	HTTPS    bool
+	*RestAuth
+}
+
+type RestAuth struct {
+	Token string
 }
 
 // Create a new RestHandler object with optional argument using Variadic options pattern for customisation
@@ -35,8 +42,8 @@ type RestHandler struct {
 func NewRestHandler(host string, options ...func(handler *RestHandler) error) (*RestHandler,
 	error) {
 	restHandler := &RestHandler{
-		Host:     host, // the IP only, default scheme is http
-		Port:     0, // no port necessary on default config
+		Host:     host,               // the IP only, default scheme is http
+		Port:     0,                  // no port necessary on default config
 		Endpoint: "/cgi-bin/api.cgi", // Default endpoint for the Reolink Camera's
 	}
 
@@ -87,11 +94,16 @@ func RestHandlerOptionHttp(https bool) func(rh *RestHandler) error {
 	}
 }
 
+func (rh *RestHandler) SetToken(token string) {
+	rh.Token = token
+}
+
 // Do the http request
 // endpoint: the trailing part of the URL after the port.
 // method: GET or POST
-// data: the byte data package needed to be sent.
-func (rh *RestHandler) Request(method string, data []byte) (*http.Response, error) {
+// payload: the json data
+// auth: alters the request to include auth token on true
+func (rh *RestHandler) Request(method string, payload interface{}, auth bool) (*GeneralData, error) {
 
 	var urlConcat string
 	if rh.Port > 0 {
@@ -106,13 +118,28 @@ func (rh *RestHandler) Request(method string, data []byte) (*http.Response, erro
 		urlConcat = fmt.Sprintf("http://%s", urlConcat)
 	}
 
-	url, err := url.Parse(urlConcat)
+	reqUrl, err := url.Parse(urlConcat)
 
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest(method, url.String(), bytes.NewBuffer(data))
+	var data []byte
+
+	if auth {
+		data, err = json.Marshal(map[string]interface{}{
+			"token": rh.Token,
+			"cmd":   []interface{}{payload},
+		})
+	} else {
+		data, err = json.Marshal([]interface{}{payload})
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(method, reqUrl.String(), bytes.NewBuffer(data))
 
 	if err != nil {
 		return nil, err
@@ -122,6 +149,7 @@ func (rh *RestHandler) Request(method string, data []byte) (*http.Response, erro
 
 	var client *http.Client
 
+	// https://stackoverflow.com/questions/51845690/how-to-program-go-to-use-a-proxy-when-using-a-custom-transport
 	if rh.Proxy != nil {
 		tr := http.DefaultTransport.(*http.Transport).Clone()
 		tr.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
@@ -144,5 +172,18 @@ func (rh *RestHandler) Request(method string, data []byte) (*http.Response, erro
 		return nil, err
 	}
 
-	return resp, nil
+	var result *GeneralData
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(body, &result)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }

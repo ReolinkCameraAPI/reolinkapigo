@@ -18,9 +18,9 @@ func NewApiHandler(username string, password string, restHandler *network.RestHa
 	authMixin := &api.AuthMixin{
 		Username: username,
 		Password: password,
-		Token:    "",
 	}
 
+	// pass the restHandler object to the Login function
 	ok, err := authMixin.Login()(restHandler)
 
 	if err != nil {

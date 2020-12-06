@@ -11,7 +11,7 @@ func BasicUsage() {
 		panic(err)
 	}
 
-	ok, err := camera.API.FormatHdd()(camera.API.RestHandler)
+	ok, err := camera.API.FormatHdd(0)(camera.API.RestHandler)
 
 	if err != nil {
 		panic(err)
