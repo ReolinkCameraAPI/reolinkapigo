@@ -11,7 +11,8 @@ func BasicUsage() {
 		panic(err)
 	}
 
-	ok, err := camera.API.FormatHdd(0)(camera.API.RestHandler)
+	// Call your camera api here and pass the camera restHandler to the function
+	ok, err := camera.API.FormatHdd(0)(camera.RestHandler)
 
 	if err != nil {
 		panic(err)

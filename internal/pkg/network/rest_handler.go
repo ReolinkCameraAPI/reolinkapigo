@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"golang.org/x/net/proxy"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -18,9 +19,16 @@ var (
 )
 
 type RestHandlerProxy struct {
-	Type string
-	Host string
-	Port int
+	Type     Proxy
+	Protocol *Protocol
+	Host     string
+	Port     int
+	Auth     *RestHandlerProxyAuth
+}
+
+type RestHandlerProxyAuth struct {
+	Username string
+	Password string
 }
 
 type RestHandler struct {
@@ -38,6 +46,8 @@ type RestAuth struct {
 
 // Create a new RestHandler object with optional argument using Variadic options pattern for customisation
 // Refer to the RestHandlerOption<option_name> functions
+// RestHandler is used to wrap the http package and give a cleaner more defined scope which the person
+// implementing the library will have full control over.
 // https://stackoverflow.com/a/26326418
 func NewRestHandler(host string, options ...func(handler *RestHandler) error) (*RestHandler,
 	error) {
@@ -76,11 +86,15 @@ func RestHandlerOptionEndpoint(endpoint string) func(rh *RestHandler) error {
 }
 
 // Add a proxy layer on top of the current connection
-func RestHandlerOptionProxy(host string, port int) func(rh *RestHandler) error {
+func RestHandlerOptionProxy(proxy Proxy, host string, port int, auth *RestHandlerProxyAuth,
+	protocol *Protocol) func(rh *RestHandler) error {
 	return func(rh *RestHandler) error {
 		rh.Proxy = &RestHandlerProxy{
-			Host: host,
-			Port: port,
+			Host:     host,
+			Port:     port,
+			Type:     proxy,
+			Auth:     auth,
+			Protocol: protocol,
 		}
 		return nil
 	}
@@ -151,17 +165,79 @@ func (rh *RestHandler) Request(method string, payload interface{}, auth bool) (*
 
 	// https://stackoverflow.com/questions/51845690/how-to-program-go-to-use-a-proxy-when-using-a-custom-transport
 	if rh.Proxy != nil {
+
 		tr := http.DefaultTransport.(*http.Transport).Clone()
 		tr.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-		proxyConcat := fmt.Sprintf("%s://%s:%d", rh.Proxy.Type, rh.Proxy.Host, rh.Port)
-		proxyUrl, err := url.Parse(proxyConcat)
 
-		if err != nil {
-			return nil, err
+		var proxyConcat string
+
+		switch rh.Proxy.Type {
+		case HTTP, HTTPS:
+			if rh.Proxy.Auth != nil {
+				proxyConcat = fmt.Sprintf("%s://%s:%s@%s:%d",
+					rh.Proxy.Type,
+					rh.Proxy.Auth.Username,
+					rh.Proxy.Auth.Password,
+					rh.Proxy.Host,
+					rh.Port)
+			} else {
+				proxyConcat = fmt.Sprintf("%s://%s:%d",
+					rh.Proxy.Type,
+					rh.Proxy.Host,
+					rh.Port)
+			}
+
+			proxyUrl, err := url.Parse(proxyConcat)
+
+			if err != nil {
+				return nil, err
+			}
+
+			tr.Proxy = http.ProxyURL(proxyUrl)
+			client = &http.Client{Transport: tr}
+
+			break
+		case SOCKS5:
+			proxyConcat = fmt.Sprintf("%s:%d",
+				rh.Proxy.Host,
+				rh.Port)
+
+			var networkType string
+
+			if rh.Proxy.Protocol != nil {
+				networkType = rh.Proxy.Protocol.String()
+			} else {
+				networkType = "tcp"
+			}
+
+			dialer, err := proxy.SOCKS5(networkType, proxyConcat, nil, proxy.Direct)
+
+			if contextDialer, ok := dialer.(proxy.ContextDialer); ok {
+				tr.DialContext = contextDialer.DialContext
+			} else {
+				return nil, fmt.Errorf("failed to create socks5 dialer")
+			}
+
+			if err != nil {
+				return nil, nil
+			}
+
+			break
+
+		default:
+			if rh.Proxy.Auth != nil {
+				proxyConcat = fmt.Sprintf("http://%s:%s@%s:%d",
+					rh.Proxy.Auth.Username,
+					rh.Proxy.Auth.Password,
+					rh.Proxy.Host,
+					rh.Port)
+			} else {
+				proxyConcat = fmt.Sprintf("http://%s:%d",
+					rh.Proxy.Host,
+					rh.Port)
+			}
 		}
 
-		tr.Proxy = http.ProxyURL(proxyUrl)
-		client = &http.Client{Transport: tr}
 	} else {
 		client = &http.Client{}
 	}
