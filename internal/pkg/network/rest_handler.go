@@ -164,6 +164,7 @@ func (rh *RestHandler) Request(method string, payload interface{}, auth bool) (*
 	var client *http.Client
 
 	// https://stackoverflow.com/questions/51845690/how-to-program-go-to-use-a-proxy-when-using-a-custom-transport
+	// https://gist.github.com/ometa/71d23ed48c03c003f6e4910648612859
 	if rh.Proxy != nil {
 
 		tr := http.DefaultTransport.(*http.Transport).Clone()
