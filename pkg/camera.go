@@ -19,7 +19,9 @@ func NewCamera(username string, password string, ip string, restOptions ...func(
 		return nil, err
 	}
 
-	apiHandler, err := app.NewApiHandler(username, password)
+	restHandler.SetUsernamePassword(username, password)
+
+	apiHandler, err := app.NewApiHandler()
 
 	if err != nil {
 		return nil, err

@@ -2,13 +2,11 @@ package api
 
 import (
 	"fmt"
+	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/models"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/network"
 )
 
 type AuthMixin struct {
-	Username string
-	Password string
-	Token    string
 }
 
 func (am *AuthMixin) Login() func(handler *network.RestHandler) (bool, error) {
@@ -19,8 +17,8 @@ func (am *AuthMixin) Login() func(handler *network.RestHandler) (bool, error) {
 			"action": 0,
 			"params": map[string]interface{}{
 				"User": map[string]interface{}{
-					"userName": am.Username,
-					"password": am.Password,
+					"userName": handler.Username,
+					"password": handler.Password,
 				},
 			},
 		}
@@ -33,9 +31,9 @@ func (am *AuthMixin) Login() func(handler *network.RestHandler) (bool, error) {
 
 		// Set the token
 		if result.Code == 0 {
-			tokenData := result.Value.(network.LoginData)
-			am.Token = tokenData.Token.Name
-			handler.SetToken(am.Token)
+			tokenData := result.Value.(*models.LoginData)
+			handler.SetToken(tokenData.Token.Name)
+
 			return true, nil
 		}
 

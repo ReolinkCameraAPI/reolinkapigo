@@ -11,16 +11,12 @@ type ApiHandler struct {
 	*api.AuthMixin
 }
 
-func NewApiHandler(username string, password string) (*ApiHandler, error) {
-	authMixin := &api.AuthMixin{
-		Username: username,
-		Password: password,
-	}
-
+func NewApiHandler() (*ApiHandler, error) {
 	return &ApiHandler{
 		&api.DeviceMixin{},
 		&api.DisplayMixin{},
 		&api.ImageMixin{},
-		authMixin,
+		&api.AuthMixin{
+		},
 	}, nil
 }

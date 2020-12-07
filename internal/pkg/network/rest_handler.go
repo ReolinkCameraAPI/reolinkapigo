@@ -41,7 +41,9 @@ type RestHandler struct {
 }
 
 type RestAuth struct {
-	Token string
+	Username string
+	Password string
+	Token    string
 }
 
 // Create a new RestHandler object with optional argument using Variadic options pattern for customisation
@@ -106,6 +108,11 @@ func RestHandlerOptionHttp(https bool) func(rh *RestHandler) error {
 		rh.HTTPS = https
 		return nil
 	}
+}
+
+func (rh *RestHandler) SetUsernamePassword(username string, password string) {
+	rh.Username = username
+	rh.Password = password
 }
 
 func (rh *RestHandler) SetToken(token string) {

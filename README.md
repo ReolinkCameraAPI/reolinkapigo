@@ -29,7 +29,13 @@ You can get the Restful API calls by looking through the HTTP Requests made the 
 
 ### Get started
 
-Implement a "Camera" object by passing it an IP address, Username and Password. By instantiating the object, it will try retrieve a login token from the Reolink Camera. This token is necessary to interact with the Camera using other commands.
+Implement a "Camera" object by passing it an IP address, Username and Password. 
+By instantiating the object, it will try retrieve a login token from the Reolink Camera.
+This token is necessary to interact with the Camera using other commands.
+
+Dependencies needed to make this work:
+
+ - [GoCV](https://gocv.io)
 
 ### Styling and Standards
 
