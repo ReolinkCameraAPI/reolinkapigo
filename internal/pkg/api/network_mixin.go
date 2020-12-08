@@ -26,7 +26,7 @@ type networkPorts struct {
 // onvif: 8000
 // rtmp: 1935
 // rtsp: 554
-func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...func(nm *networkPorts) error) func(handler *network.RestHandler) (bool,
+func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...func(nm *networkPorts)) func(handler *network.RestHandler) (bool,
 	error) {
 
 	// Defaults
@@ -40,10 +40,7 @@ func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...func(nm *networkPor
 	}
 
 	for _, op := range networkPortOptions {
-		err := op(networkPorts)
-		if err != nil {
-
-		}
+		op(networkPorts)
 	}
 
 	return func(handler *network.RestHandler) (bool, error) {
@@ -62,7 +59,7 @@ func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...func(nm *networkPor
 			},
 		}
 
-		_, err := handler.Request("POST", payload, true)
+		_, err := handler.Request("POST", payload, "SetNetPort", true)
 
 		if err != nil {
 			return false, err
@@ -87,7 +84,7 @@ func (nm *NetworkMixin) SetWifi(ssid string, password string) func(handler *netw
 			},
 		}
 
-		_, err := handler.Request("POST", payload, true)
+		_, err := handler.Request("POST", payload, "SetWifi", true)
 
 		if err != nil {
 			return false, err
@@ -107,7 +104,7 @@ func (nm *NetworkMixin) GetWifi() func(handler *network.RestHandler) (*models.Wi
 			"params": map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, true)
+		result, err := handler.Request("POST", payload, "GetWifi", true)
 
 		if err != nil {
 			return nil, err
@@ -134,7 +131,7 @@ func (nm *NetworkMixin) ScanWifi() func(handler *network.RestHandler) (*models.S
 			"params": map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, true)
+		result, err := handler.Request("POST", payload, "ScanWifi", true)
 
 		if err != nil {
 			return nil, err
@@ -161,7 +158,7 @@ func (nm *NetworkMixin) GetNetworkGeneral() func(handler *network.RestHandler) (
 			"params": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, true)
+		resp, err := handler.Request("POST", payload, "GetLocalLink", true)
 
 		if err != nil {
 			return nil, err
@@ -188,7 +185,7 @@ func (nm *NetworkMixin) GetNetworkDDNS() func(handler *network.RestHandler) (*mo
 			"params": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, true)
+		resp, err := handler.Request("POST", payload, "GetDdns", true)
 
 		if err != nil {
 			return nil, err
@@ -215,7 +212,7 @@ func (nm *NetworkMixin) GetNetworkNTP() func(handler *network.RestHandler) (*mod
 			"params": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, true)
+		resp, err := handler.Request("POST", payload, "GetNtp", true)
 
 		if err != nil {
 			return nil, err
@@ -242,7 +239,7 @@ func (nm *NetworkMixin) GetNetworkEmail() func(handler *network.RestHandler) (*m
 			"params": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, true)
+		resp, err := handler.Request("POST", payload, "GetEmail", true)
 
 		if err != nil {
 			return nil, err
@@ -269,7 +266,7 @@ func (nm *NetworkMixin) GetNetworkFTP() func(handler *network.RestHandler) (*mod
 			"params": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, true)
+		resp, err := handler.Request("POST", payload, "GetFtp", true)
 
 		if err != nil {
 			return nil, err
@@ -296,7 +293,7 @@ func (nm *NetworkMixin) GetNetworkPush() func(handler *network.RestHandler) (*mo
 			"params": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, true)
+		resp, err := handler.Request("POST", payload, "GetPush", true)
 
 		if err != nil {
 			return nil, err
@@ -324,54 +321,48 @@ func (nm *NetworkMixin) GetNetworkStatus() func(handler *network.RestHandler) (*
 
 // An option for SetNetworkPort to set the httpPort
 // Default value of httpPort is 80
-func NetworkPortOptionHttp(httpPort int) func(nm *networkPorts) error {
-	return func(nm *networkPorts) error {
+func NetworkPortOptionHttp(httpPort int) func(nm *networkPorts) {
+	return func(nm *networkPorts) {
 		nm.http = httpPort
-		return nil
 	}
 }
 
 // An option for SetNetworkPort to set the httpsPort
 // Default value of httpsPort is 443
-func NetworkPortOptionHttps(https int) func(nm *networkPorts) error {
-	return func(nm *networkPorts) error {
+func NetworkPortOptionHttps(https int) func(nm *networkPorts) {
+	return func(nm *networkPorts) {
 		nm.https = https
-		return nil
 	}
 }
 
 // An option for SetNetworkPort to set the mediaPort
 // Default value of mediaPort is 9000
-func NetworkPortOptionMedia(media int) func(nm *networkPorts) error {
-	return func(nm *networkPorts) error {
+func NetworkPortOptionMedia(media int) func(nm *networkPorts) {
+	return func(nm *networkPorts) {
 		nm.media = media
-		return nil
 	}
 }
 
 // An option for SetNetworkPort to set the onvifPort
 // Default value of onvifPort is 8000
-func NetworkPortOptionOnvif(onvif int) func(nm *networkPorts) error {
-	return func(nm *networkPorts) error {
+func NetworkPortOptionOnvif(onvif int) func(nm *networkPorts) {
+	return func(nm *networkPorts) {
 		nm.onvif = onvif
-		return nil
 	}
 }
 
 // An option for SetNetworkPort to set the rtmpPort
 // Default value of rtmpPort is 1935
-func NetworkPortOptionRtmp(rtmp int) func(nm *networkPorts) error {
-	return func(nm *networkPorts) error {
+func NetworkPortOptionRtmp(rtmp int) func(nm *networkPorts) {
+	return func(nm *networkPorts) {
 		nm.rtmp = rtmp
-		return nil
 	}
 }
 
 // An option for SetNetworkPort to set the rtspPort
 // Default value of rtspPort is 554
-func NetworkPortOptionRtsp(rtsp int) func(nm *networkPorts) error {
-	return func(nm *networkPorts) error {
+func NetworkPortOptionRtsp(rtsp int) func(nm *networkPorts) {
+	return func(nm *networkPorts) {
 		nm.rtsp = rtsp
-		return nil
 	}
 }

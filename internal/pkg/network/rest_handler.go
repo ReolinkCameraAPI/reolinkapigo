@@ -124,7 +124,7 @@ func (rh *RestHandler) SetToken(token string) {
 // method: GET or POST
 // payload: the json data
 // auth: alters the request to include auth token on true
-func (rh *RestHandler) Request(method string, payload interface{}, auth bool) (*GeneralData, error) {
+func (rh *RestHandler) Request(method string, payload interface{}, command string,  auth bool) (*GeneralData, error) {
 
 	var urlConcat string
 	if rh.Port > 0 {
@@ -139,22 +139,27 @@ func (rh *RestHandler) Request(method string, payload interface{}, auth bool) (*
 		urlConcat = fmt.Sprintf("http://%s", urlConcat)
 	}
 
-	reqUrl, err := url.Parse(urlConcat)
+	var data []byte
+
+	if auth {
+		if rh.Token == "" {
+			return nil, fmt.Errorf("token is empty. login first")
+		}
+
+		params := url.Values{}
+		params.Add("token", rh.Token)
+		params.Add("cmd", command)
+
+		urlConcat = fmt.Sprintf("%s?%s",urlConcat, params.Encode())
+	}
+
+	data, err := json.Marshal([]interface{}{payload})
 
 	if err != nil {
 		return nil, err
 	}
 
-	var data []byte
-
-	if auth {
-		data, err = json.Marshal(map[string]interface{}{
-			"token": rh.Token,
-			"cmd":   []interface{}{payload},
-		})
-	} else {
-		data, err = json.Marshal([]interface{}{payload})
-	}
+	reqUrl, err := url.Parse(urlConcat)
 
 	if err != nil {
 		return nil, err

@@ -7,7 +7,7 @@ package enum
 type AntiFlicker uint
 
 const (
-	OUTDOOR = iota
+	OUTDOOR AntiFlicker = iota
 )
 
 func (i AntiFlicker) Name() string {
@@ -18,7 +18,7 @@ func (i AntiFlicker) Name() string {
 type Exposure uint
 
 const (
-	AUTO = iota
+	AUTO Exposure = iota
 )
 
 func (i Exposure) Name() string {
