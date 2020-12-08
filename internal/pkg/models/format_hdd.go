@@ -1,5 +1,5 @@
 package models
 
-type FormatHddData struct {
+type FormatHdd struct {
 	RspCode int `json:"rspCode"`
 }

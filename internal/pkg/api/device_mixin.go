@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/models"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/network"
@@ -9,11 +10,10 @@ import (
 type DeviceMixin struct {
 }
 
-
 // Get the Camera's HDD information
 // TODO: Better error messages
-func (dm *DeviceMixin) GetHddInfo() func(handler *network.RestHandler) (*models.GetHddInfoData, error) {
-	return func(handler *network.RestHandler) (*models.GetHddInfoData, error) {
+func (dm *DeviceMixin) GetHddInfo() func(handler *network.RestHandler) (*models.HddInfo, error) {
+	return func(handler *network.RestHandler) (*models.HddInfo, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetHddInfo",
 			"action": 0,
@@ -27,7 +27,13 @@ func (dm *DeviceMixin) GetHddInfo() func(handler *network.RestHandler) (*models.
 		}
 
 		if result.Code == 0 {
-			hddInfoData := result.Value.(*models.GetHddInfoData)
+			var hddInfoData *models.HddInfo
+			err = json.Unmarshal(result.Value["HddInfo"], &hddInfoData)
+
+			if err != nil {
+				return nil, err
+			}
+
 			return hddInfoData, nil
 		}
 
@@ -56,7 +62,13 @@ func (dm *DeviceMixin) FormatHdd(hddId int) func(handler *network.RestHandler) (
 			return false, err
 		}
 
-		formatHdd := result.Value.(*models.FormatHddData)
+		var formatHdd *models.FormatHdd
+
+		err = json.Unmarshal(result.Value["DevInfo"], &formatHdd)
+
+		if err != nil {
+			return false, err
+		}
 
 		if formatHdd.RspCode == 200 {
 			return true, nil

@@ -9,6 +9,8 @@ type ApiHandler struct {
 	*api.DisplayMixin
 	*api.ImageMixin
 	*api.AuthMixin
+	*api.RtspMixin
+	*api.NetworkMixin
 }
 
 func NewApiHandler() (*ApiHandler, error) {
@@ -16,7 +18,8 @@ func NewApiHandler() (*ApiHandler, error) {
 		&api.DeviceMixin{},
 		&api.DisplayMixin{},
 		&api.ImageMixin{},
-		&api.AuthMixin{
-		},
+		&api.AuthMixin{},
+		&api.RtspMixin{},
+		&api.NetworkMixin{},
 	}, nil
 }
