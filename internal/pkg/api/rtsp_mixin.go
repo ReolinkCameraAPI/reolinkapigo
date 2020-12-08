@@ -18,9 +18,9 @@ type RtspStream struct {
 // Open an RTSP stream using GoCV (openCv 4)
 // This function returns a channel containing the frames as it is received from the camera
 // https://adaickalavan.github.io/portfolio/rtsp_video_streaming/#gsc.tab=0
-func (rm *RtspMixin) OpenVideoStream(port *int, profile enum.RtspProfile,
-	protocol *network.Protocol) func(handler *network.RestHandler) chan *RtspStream {
-	return func(handler *network.RestHandler) chan *RtspStream {
+func (rm *RtspMixin) OpenRtspStream(port *int, profile enum.RtspProfile,
+	protocol *network.Protocol) func(handler *network.RestHandler) <-chan *RtspStream {
+	return func(handler *network.RestHandler) <-chan *RtspStream {
 
 		// creating unbuffered channel due to wanting frames in order
 		// this will block the next frame from being accessible
@@ -51,7 +51,16 @@ func (rm *RtspMixin) OpenVideoStream(port *int, profile enum.RtspProfile,
 
 			for {
 
+				if !capture.IsOpened() {
+					close(stream)
+					return
+				}
+
 				if !capture.Read(&frame) {
+					continue
+				}
+
+				if frame.Empty() {
 					continue
 				}
 
