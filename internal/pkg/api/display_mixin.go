@@ -10,6 +10,26 @@ import (
 type DisplayMixin struct {
 }
 
+type osdChannel struct {
+	Enable bool
+	Name   string
+	Pos    string
+}
+
+type osdTime struct {
+	Enable bool
+	Pos    string
+}
+
+type osd struct {
+	BgColor    bool
+	Channel    int
+	OsdChannel osdChannel
+	OsdTime    osdTime
+}
+
+type OptionOsd func(*osd)
+
 // Get the camera's Osd information
 func (dm *DisplayMixin) GetOSD() func(handler *network.RestHandler) (*models.Osd, error) {
 	return func(handler *network.RestHandler) (*models.Osd, error) {
@@ -69,28 +89,25 @@ func (dm *DisplayMixin) GetMask() func(handler *network.RestHandler) (*models.Ma
 }
 
 // Set the camera's Osd
-func (dm *DisplayMixin) SetOSD(osdOption ...func(osd *models.Osd) error) func(handler *network.RestHandler) (bool,
+func (dm *DisplayMixin) SetOSD(osdOption ...OptionOsd) func(handler *network.RestHandler) (bool,
 	error) {
 
-	osd := &models.Osd{
+	osd := &osd{
 		BgColor: false,
 		Channel: 0,
-		OsdChannel: models.OsdChannel{
+		OsdChannel: osdChannel{
 			Enable: true,
 			Name:   "",
 			Pos:    "Lower Right",
 		},
-		OsdTime: models.OsdTime{
+		OsdTime: osdTime{
 			Enable: false,
 			Pos:    "Lower Right",
 		},
 	}
 
 	for _, op := range osdOption {
-		err := op(osd)
-		if err != nil {
-
-		}
+		op(osd)
 	}
 
 	return func(handler *network.RestHandler) (bool, error) {
@@ -133,51 +150,50 @@ func (dm *DisplayMixin) SetOSD(osdOption ...func(osd *models.Osd) error) func(ha
 }
 
 // Set the OSD background color on or off
-func SetOsdOptionBgColor(bgColor bool) func(dm *models.Osd) {
-	return func(dm *models.Osd) {
-		dm.BgColor = bgColor
+func SetOsdOptionBgColor(bgColor bool) OptionOsd {
+	return func(o *osd) {
+		o.BgColor = bgColor
 	}
 }
 
 // Set the OSD channel
-func SetOsdOptionsChannel(channel int) func(dm *models.Osd) {
-	return func(dm *models.Osd) {
-		dm.Channel = channel
+func SetOsdOptionsChannel(channel int) OptionOsd {
+	return func(o *osd) {
+		o.Channel = channel
 	}
 }
 
 // Set the OSD channel on or off
-func SetOsdOptionsChannelEnable(enable bool) func(dm *models.Osd) {
-	return func(dm *models.Osd) {
-		dm.OsdChannel.Enable = enable
+func SetOsdOptionsChannelEnable(enable bool) OptionOsd {
+	return func(o *osd) {
+		o.OsdChannel.Enable = enable
 	}
 }
 
 // Set the OSD channel name
-func SetOsdOptionsChannelName(name string) func(dm *models.Osd) {
-	return func(dm *models.Osd) {
-		dm.OsdChannel.Name = name
+func SetOsdOptionsChannelName(name string) OptionOsd {
+	return func(o *osd) {
+		o.OsdChannel.Name = name
 	}
 }
 
 // Set the OSD channel position
-func SetOsdOptionsChannelPos(position enum.OsdPosition) func(dm *models.Osd) {
-	return func(dm *models.Osd) {
-		dm.OsdChannel.Pos = position.Name()
+func SetOsdOptionsChannelPos(position enum.OsdPosition) OptionOsd {
+	return func(o *osd) {
+		o.OsdChannel.Pos = position.Name()
 	}
 }
 
 // Set the OSD time as on or off
-func SetOsdOptionsTimeEnable(enable bool) func(dm *models.Osd) {
-	return func(dm *models.Osd) {
-		dm.OsdTime.Enable = enable
+func SetOsdOptionsTimeEnable(enable bool) OptionOsd {
+	return func(o *osd) {
+		o.OsdTime.Enable = enable
 	}
 }
 
 // Set the OSD time position
-func SetOsdOptionsTimePos(position enum.OsdPosition) func(dm *models.Osd) {
-	return func(dm *models.Osd) {
-		dm.OsdTime.Pos = position.Name()
+func SetOsdOptionsTimePos(position enum.OsdPosition) OptionOsd {
+	return func(o *osd) {
+		o.OsdTime.Pos = position.Name()
 	}
 }
-

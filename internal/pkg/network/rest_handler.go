@@ -46,13 +46,14 @@ type RestAuth struct {
 	Token    string
 }
 
+type OptionRestHandler func(*RestHandler)
+
 // Create a new RestHandler object with optional argument using Variadic options pattern for customisation
 // Refer to the RestHandlerOption<option_name> functions
 // RestHandler is used to wrap the http package and give a cleaner more defined scope which the person
 // implementing the library will have full control over.
 // https://stackoverflow.com/a/26326418
-func NewRestHandler(host string, options ...func(handler *RestHandler) error) (*RestHandler,
-	error) {
+func NewRestHandler(host string, options ...OptionRestHandler) *RestHandler {
 	restHandler := &RestHandler{
 		Host:     host,               // the IP only, default scheme is http
 		Port:     0,                  // no port necessary on default config
@@ -60,37 +61,33 @@ func NewRestHandler(host string, options ...func(handler *RestHandler) error) (*
 	}
 
 	for _, op := range options {
-		err := op(restHandler)
-		if err != nil {
-			return nil, err
-		}
+		op(restHandler)
 	}
-	return restHandler, nil
+
+	return restHandler
 }
 
 // Change the default port to a custom port.
 // Default is unset due to http being the default protocol
-func RestHandlerOptionPort(port int) func(rh *RestHandler) error {
-	return func(rh *RestHandler) error {
+func RestHandlerOptionPort(port int) OptionRestHandler {
+	return func(rh *RestHandler) {
 		rh.Port = port
-		return nil
 	}
 }
 
 // Change the default endpoint to a custom endpoint
 // Default is "/cgi-bin/api.cgi"
 // If for some reason the camera you are using is different, one can update it here.
-func RestHandlerOptionEndpoint(endpoint string) func(rh *RestHandler) error {
-	return func(rh *RestHandler) error {
+func RestHandlerOptionEndpoint(endpoint string) OptionRestHandler {
+	return func(rh *RestHandler) {
 		rh.Endpoint = endpoint
-		return nil
 	}
 }
 
 // Add a proxy layer on top of the current connection
 func RestHandlerOptionProxy(proxy Proxy, host string, port int, auth *RestHandlerProxyAuth,
-	protocol *Protocol) func(rh *RestHandler) error {
-	return func(rh *RestHandler) error {
+	protocol *Protocol) OptionRestHandler {
+	return func(rh *RestHandler) {
 		rh.Proxy = &RestHandlerProxy{
 			Host:     host,
 			Port:     port,
@@ -98,15 +95,13 @@ func RestHandlerOptionProxy(proxy Proxy, host string, port int, auth *RestHandle
 			Auth:     auth,
 			Protocol: protocol,
 		}
-		return nil
 	}
 }
 
 // Change the default scheme from HTTP to HTTPS
-func RestHandlerOptionHttp(https bool) func(rh *RestHandler) error {
-	return func(rh *RestHandler) error {
+func RestHandlerOptionHttp(https bool) OptionRestHandler {
+	return func(rh *RestHandler) {
 		rh.HTTPS = https
-		return nil
 	}
 }
 
@@ -124,7 +119,7 @@ func (rh *RestHandler) SetToken(token string) {
 // method: GET or POST
 // payload: the json data
 // auth: alters the request to include auth token on true
-func (rh *RestHandler) Request(method string, payload interface{}, command string,  auth bool) (*GeneralData, error) {
+func (rh *RestHandler) Request(method string, payload interface{}, command string, auth bool) (*GeneralData, error) {
 
 	var urlConcat string
 	if rh.Port > 0 {
@@ -150,7 +145,7 @@ func (rh *RestHandler) Request(method string, payload interface{}, command strin
 		params.Add("token", rh.Token)
 		params.Add("cmd", command)
 
-		urlConcat = fmt.Sprintf("%s?%s",urlConcat, params.Encode())
+		urlConcat = fmt.Sprintf("%s?%s", urlConcat, params.Encode())
 	}
 
 	data, err := json.Marshal([]interface{}{payload})

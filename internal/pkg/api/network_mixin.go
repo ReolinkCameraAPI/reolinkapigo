@@ -18,6 +18,8 @@ type networkPorts struct {
 	rtsp  int
 }
 
+type NetworkPortOptions func(*networkPorts)
+
 // Set the camera network ports using the NetworkPortOption<prop> functions
 // Defaults are automatically for the excluded networkPortOptions
 // http: 80
@@ -26,7 +28,7 @@ type networkPorts struct {
 // onvif: 8000
 // rtmp: 1935
 // rtsp: 554
-func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...func(nm *networkPorts)) func(handler *network.RestHandler) (bool,
+func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...NetworkPortOptions) func(handler *network.RestHandler) (bool,
 	error) {
 
 	// Defaults
@@ -321,7 +323,7 @@ func (nm *NetworkMixin) GetNetworkStatus() func(handler *network.RestHandler) (*
 
 // An option for SetNetworkPort to set the httpPort
 // Default value of httpPort is 80
-func NetworkPortOptionHttp(httpPort int) func(nm *networkPorts) {
+func NetworkPortOptionHttp(httpPort int) NetworkPortOptions {
 	return func(nm *networkPorts) {
 		nm.http = httpPort
 	}
@@ -329,7 +331,7 @@ func NetworkPortOptionHttp(httpPort int) func(nm *networkPorts) {
 
 // An option for SetNetworkPort to set the httpsPort
 // Default value of httpsPort is 443
-func NetworkPortOptionHttps(https int) func(nm *networkPorts) {
+func NetworkPortOptionHttps(https int) NetworkPortOptions {
 	return func(nm *networkPorts) {
 		nm.https = https
 	}
@@ -337,7 +339,7 @@ func NetworkPortOptionHttps(https int) func(nm *networkPorts) {
 
 // An option for SetNetworkPort to set the mediaPort
 // Default value of mediaPort is 9000
-func NetworkPortOptionMedia(media int) func(nm *networkPorts) {
+func NetworkPortOptionMedia(media int) NetworkPortOptions {
 	return func(nm *networkPorts) {
 		nm.media = media
 	}
@@ -345,7 +347,7 @@ func NetworkPortOptionMedia(media int) func(nm *networkPorts) {
 
 // An option for SetNetworkPort to set the onvifPort
 // Default value of onvifPort is 8000
-func NetworkPortOptionOnvif(onvif int) func(nm *networkPorts) {
+func NetworkPortOptionOnvif(onvif int) NetworkPortOptions {
 	return func(nm *networkPorts) {
 		nm.onvif = onvif
 	}
@@ -353,7 +355,7 @@ func NetworkPortOptionOnvif(onvif int) func(nm *networkPorts) {
 
 // An option for SetNetworkPort to set the rtmpPort
 // Default value of rtmpPort is 1935
-func NetworkPortOptionRtmp(rtmp int) func(nm *networkPorts) {
+func NetworkPortOptionRtmp(rtmp int) NetworkPortOptions {
 	return func(nm *networkPorts) {
 		nm.rtmp = rtmp
 	}
@@ -361,7 +363,7 @@ func NetworkPortOptionRtmp(rtmp int) func(nm *networkPorts) {
 
 // An option for SetNetworkPort to set the rtspPort
 // Default value of rtspPort is 554
-func NetworkPortOptionRtsp(rtsp int) func(nm *networkPorts) {
+func NetworkPortOptionRtsp(rtsp int) NetworkPortOptions {
 	return func(nm *networkPorts) {
 		nm.rtsp = rtsp
 	}
