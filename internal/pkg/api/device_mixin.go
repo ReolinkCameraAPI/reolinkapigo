@@ -62,18 +62,18 @@ func (dm *DeviceMixin) FormatHdd(hddId int) func(handler *network.RestHandler) (
 			return false, err
 		}
 
-		var formatHdd *models.FormatHdd
+		var respCode int
 
-		err = json.Unmarshal(result.Value["DevInfo"], &formatHdd)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		if formatHdd.RspCode == 200 {
+		if respCode == 200 {
 			return true, nil
 		}
 
-		return false, fmt.Errorf("could not format camera hdd")
+		return false, fmt.Errorf("camera could not format hdd. camera responded with %v", result.Value)
 	}
 }

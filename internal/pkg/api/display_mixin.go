@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/enum"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/models"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/network"
@@ -137,15 +138,19 @@ func (dm *DisplayMixin) SetOSD(osdOption ...OptionOsd) func(handler *network.Res
 			return false, err
 		}
 
-		var osdData *models.Osd
+		var respCode int
 
-		err = json.Unmarshal(result.Value["Osd"], &osdData)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return true, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not set osd. camera responded with %v", result.Value)
 	}
 }
 

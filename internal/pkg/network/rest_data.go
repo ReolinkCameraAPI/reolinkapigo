@@ -8,7 +8,3 @@ type GeneralData struct {
 	Initial map[string]json.RawMessage `json:"initial;omitempty"`
 	Range   map[string]json.RawMessage `json:"range;omitempty"`
 }
-
-type SetDataResponse struct {
-	ResponseCode int `json:"rspCode"`
-}

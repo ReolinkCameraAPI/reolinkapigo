@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/models"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/network"
 )
@@ -61,14 +62,25 @@ func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...NetworkPortOptions)
 			},
 		}
 
-		_, err := handler.Request("POST", payload, "SetNetPort", true)
+		result, err := handler.Request("POST", payload, "SetNetPort", true)
 
 		if err != nil {
 			return false, err
 		}
 
-		// TODO: get the correct type back from the response.
-		return true, nil
+		var respCode int
+
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
+
+		if err != nil {
+			return false, err
+		}
+
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not set network port(s). camera responded with %v", result.Value)
 	}
 }
 
@@ -86,14 +98,25 @@ func (nm *NetworkMixin) SetWifi(ssid string, password string) func(handler *netw
 			},
 		}
 
-		_, err := handler.Request("POST", payload, "SetWifi", true)
+		result, err := handler.Request("POST", payload, "SetWifi", true)
 
 		if err != nil {
 			return false, err
 		}
 
-		// TODO: get the correct type back from the response.
-		return true, nil
+		var respCode int
+
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
+
+		if err != nil {
+			return false, err
+		}
+
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not set wifi. camera responded with %v", result.Value)
 	}
 }
 

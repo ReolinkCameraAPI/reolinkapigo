@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/models"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/network"
 )
@@ -79,15 +80,19 @@ func (sm *SystemMixin) RebootCamera() func(handler *network.RestHandler) (bool, 
 			return false, err
 		}
 
-		var deviceRebootData *models.DeviceReboot
-		// TODO: need to confirm this
-		err = json.Unmarshal(result.Value["Reboot"], &deviceRebootData)
+		var respCode int
+
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return true, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not reboot camera. camera responded with %v", result.Value)
 	}
 }
 

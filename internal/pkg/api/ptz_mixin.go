@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/models"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/network"
 )
@@ -125,16 +126,19 @@ func (pm *PtzMixin) AddPreset(ptzOptions ...OptionPtzPreset) func(handler *netwo
 			return false, err
 		}
 
-		var ptzPreset *models.PtzPreset
+		var respCode int
 
-		// TODO: will need to confirm this
-		err = json.Unmarshal(result.Value["Ptz"], &ptzPreset)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return true, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not add preset. camera responded with %v", result.Value)
 	}
 }
 
@@ -163,15 +167,19 @@ func (pm *PtzMixin) RemovePreset(ptzOptions ...OptionPtzPreset) func(handler *ne
 			return false, err
 		}
 
-		var ptzPreset *models.PtzPreset
+		var respCode int
 
-		err = json.Unmarshal(result.Value["Ptz"], ptzPreset)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return true, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not remove preset. camera responded with %v", result.Value)
 	}
 }
 
@@ -205,15 +213,19 @@ func (pm *PtzMixin) MoveRight(ptzOptions ...OptionPtzOperation) func(handler *ne
 			return false, err
 		}
 
-		var ptzOperation *models.PtzOperation
+		var respCode int
 
-		err = json.Unmarshal(result.Value["Ptz"], ptzOperation)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return false, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not move right. camera responded with %v", result.Value)
 	}
 }
 
@@ -247,15 +259,19 @@ func (pm *PtzMixin) MoveRightUp(ptzOptions ...OptionPtzOperation) func(handler *
 			return false, err
 		}
 
-		var ptzOperation *models.PtzOperation
+		var respCode int
 
-		err = json.Unmarshal(result.Value["Ptz"], ptzOperation)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return false, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not move right up. camera responded with %v", result.Value)
 	}
 }
 
@@ -289,15 +305,19 @@ func (pm *PtzMixin) MoveRightDown(ptzOptions ...OptionPtzOperation) func(handler
 			return false, err
 		}
 
-		var ptzOperation *models.PtzOperation
+		var respCode int
 
-		err = json.Unmarshal(result.Value["Ptz"], ptzOperation)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return false, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not move right down. camera responded with %v", result.Value)
 	}
 }
 
@@ -331,15 +351,19 @@ func (pm *PtzMixin) MoveLeft(ptzOptions ...OptionPtzOperation) func(handler *net
 			return false, err
 		}
 
-		var ptzOperation *models.PtzOperation
+		var respCode int
 
-		err = json.Unmarshal(result.Value["Ptz"], ptzOperation)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return false, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not move left. camera responded with %v", result.Value)
 	}
 }
 
@@ -373,15 +397,19 @@ func (pm *PtzMixin) MoveLeftUp(ptzOptions ...OptionPtzOperation) func(handler *n
 			return false, err
 		}
 
-		var ptzOperation *models.PtzOperation
+		var respCode int
 
-		err = json.Unmarshal(result.Value["Ptz"], ptzOperation)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return false, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not move left up. camera responded with %v", result.Value)
 	}
 }
 
@@ -415,15 +443,19 @@ func (pm *PtzMixin) MoveLeftDown(ptzOptions ...OptionPtzOperation) func(handler 
 			return false, err
 		}
 
-		var ptzOperation *models.PtzOperation
+		var respCode int
 
-		err = json.Unmarshal(result.Value["Ptz"], ptzOperation)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return false, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not move left down. camera responded with %v", result.Value)
 	}
 }
 
@@ -457,15 +489,19 @@ func (pm *PtzMixin) MoveUp(ptzOptions ...OptionPtzOperation) func(handler *netwo
 			return false, err
 		}
 
-		var ptzOperation *models.PtzOperation
+		var respCode int
 
-		err = json.Unmarshal(result.Value["Ptz"], ptzOperation)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return false, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not move up. camera responded with %v", result.Value)
 	}
 }
 
@@ -499,15 +535,19 @@ func (pm *PtzMixin) MoveDown(ptzOptions ...OptionPtzOperation) func(handler *net
 			return false, err
 		}
 
-		var ptzOperation *models.PtzOperation
+		var respCode int
 
-		err = json.Unmarshal(result.Value["Ptz"], ptzOperation)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return false, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not move down. camera responded with %v", result.Value)
 	}
 }
 
@@ -529,15 +569,19 @@ func (pm *PtzMixin) StopPtz() func(handler *network.RestHandler) (bool,
 			return false, err
 		}
 
-		var ptzOperation *models.PtzOperation
+		var respCode int
 
-		err = json.Unmarshal(result.Value["Ptz"], ptzOperation)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return false, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not stop ptz operation. camera responded with %v", result.Value)
 	}
 }
 
@@ -558,15 +602,19 @@ func (pm *PtzMixin) AutoMovement() func(handler *network.RestHandler) (bool, err
 			return false, err
 		}
 
-		var ptzOperation *models.PtzOperation
+		var respCode int
 
-		err = json.Unmarshal(result.Value["Ptz"], ptzOperation)
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
 			return false, err
 		}
 
-		return false, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not auto move. camera responded with %v", result.Value)
 	}
 }
 
