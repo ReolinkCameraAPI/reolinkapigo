@@ -14,6 +14,8 @@ type ApiHandler struct {
 	*api.PtzMixin
 	*api.RecordingMixin
 	*api.SystemMixin
+	*api.UserMixin
+	*api.ZoomFocusMixin
 }
 
 func NewApiHandler() (*ApiHandler, error) {
@@ -27,5 +29,7 @@ func NewApiHandler() (*ApiHandler, error) {
 		&api.PtzMixin{},
 		&api.RecordingMixin{},
 		&api.SystemMixin{},
+		&api.UserMixin{},
+		&api.ZoomFocusMixin{},
 	}, nil
 }
