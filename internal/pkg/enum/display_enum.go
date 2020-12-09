@@ -11,6 +11,6 @@ const (
 	LOWER_RIGHT
 )
 
-func (op OsdPosition) Name() string {
+func (op OsdPosition) Value() string {
 	return []string{"Upper Left", "Top Center", "Upper Right", "Lower Left", "Bottom Center", "Lower Right"}[op]
 }

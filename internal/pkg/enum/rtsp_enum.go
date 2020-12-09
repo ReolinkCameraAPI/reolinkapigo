@@ -7,6 +7,6 @@ const (
 	MAIN
 )
 
-func (rp RtspProfile) String() string {
+func (rp RtspProfile) Value() string {
 	return []string{"base", "main"}[rp]
 }

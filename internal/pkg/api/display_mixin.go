@@ -180,7 +180,7 @@ func SetOsdOptionsChannelName(name string) OptionOsd {
 // Set the OSD channel position
 func SetOsdOptionsChannelPos(position enum.OsdPosition) OptionOsd {
 	return func(o *osd) {
-		o.OsdChannel.Pos = position.Name()
+		o.OsdChannel.Pos = position.Value()
 	}
 }
 
@@ -194,6 +194,6 @@ func SetOsdOptionsTimeEnable(enable bool) OptionOsd {
 // Set the OSD time position
 func SetOsdOptionsTimePos(position enum.OsdPosition) OptionOsd {
 	return func(o *osd) {
-		o.OsdTime.Pos = position.Name()
+		o.OsdTime.Pos = position.Value()
 	}
 }

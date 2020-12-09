@@ -591,7 +591,7 @@ func PtzOptionPresetIndex(index int) OptionPtzPreset {
 	}
 }
 
-// Set the Ptz Preset Name
+// Set the Ptz Preset Value
 func PtzOptionsPresetName(name string) OptionPtzPreset {
 	return func(p *ptzPresetOptions) {
 		p.Name = name

@@ -10,7 +10,7 @@ const (
 	OUTDOOR AntiFlicker = iota
 )
 
-func (i AntiFlicker) Name() string {
+func (i AntiFlicker) Value() string {
 	return []string{"Outdoor"}[i]
 }
 // ===
@@ -21,7 +21,7 @@ const (
 	AUTO Exposure = iota
 )
 
-func (i Exposure) Name() string {
+func (i Exposure) Value() string {
 	return []string{"Auto"}[i]
 }
 // ===

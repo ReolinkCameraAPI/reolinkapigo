@@ -62,7 +62,7 @@ func TestAuthMixin_Login(t *testing.T) {
 
 			loginData := map[string]interface{}{
 				"Token": map[string]interface{}{
-					"Name": "12345",
+					"Value": "12345",
 					"LeaseTime": 3600,
 				},
 			}

@@ -43,40 +43,35 @@ type NetworkNTP struct {
 	Server   string `json:"server"`
 }
 
-type NetworkSchedule struct {
-	Enable bool   `json:"enable"`
-	Table  string `json:"table"`
-}
-
 type NetworkEmail struct {
-	Username   string          `json:"username"`
-	Password   string          `json:"password"`
-	Addr1      string          `json:"addr1"`
-	Addr2      string          `json:"addr2"`
-	Addr3      string          `json:"addr3"`
-	Attachment string          `json:"attachment"`
-	Interval   string          `json:"interval"`
-	Nickname   string          `json:"nickName"`
-	Schedule   NetworkSchedule `json:"schedule"`
-	SmtpPort   int             `json:"smtpPort"`
-	SmtpServer string          `json:"smtpServer"`
-	SSL        string          `json:"ssl"`
+	Username   string   `json:"username"`
+	Password   string   `json:"password"`
+	Addr1      string   `json:"addr1"`
+	Addr2      string   `json:"addr2"`
+	Addr3      string   `json:"addr3"`
+	Attachment string   `json:"attachment"`
+	Interval   string   `json:"interval"`
+	Nickname   string   `json:"nickName"`
+	Schedule   Schedule `json:"schedule"`
+	SmtpPort   int      `json:"smtpPort"`
+	SmtpServer string   `json:"smtpServer"`
+	SSL        string   `json:"ssl"`
 }
 
 type NetworkFTP struct {
-	Username   string          `json:"userName"`
-	Password   string          `json:"password"`
-	Anonymous  bool            `json:"anonymous"`
-	Interval   int             `json:"interval"`
-	MaxSize    int             `json:"maxSize"`
-	Mode       int             `json:"mode"`
-	Port       int             `json:"port"`
-	RemoteDir  string          `json:"remoteDir"`
-	Schedule   NetworkSchedule `json:"schedule"`
-	Server     string          `json:"server"`
-	StreamType int             `json:"streamType"`
+	Username   string   `json:"userName"`
+	Password   string   `json:"password"`
+	Anonymous  bool     `json:"anonymous"`
+	Interval   int      `json:"interval"`
+	MaxSize    int      `json:"maxSize"`
+	Mode       int      `json:"mode"`
+	Port       int      `json:"port"`
+	RemoteDir  string   `json:"remoteDir"`
+	Schedule   Schedule `json:"schedule"`
+	Server     string   `json:"server"`
+	StreamType int      `json:"streamType"`
 }
 
 type NetworkPush struct {
-	Schedule NetworkSchedule `json:"schedule"`
+	Schedule Schedule `json:"schedule"`
 }
