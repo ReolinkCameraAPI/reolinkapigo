@@ -1,6 +1,7 @@
 package models
 
-type PtzOperation struct {
-}
+// TODO: update
+type PtzOperation struct {}
 
+// TODO: update
 type PtzPreset struct{}

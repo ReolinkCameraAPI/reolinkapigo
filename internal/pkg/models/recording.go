@@ -14,7 +14,6 @@ type RecordingSubStream struct {
 	Size      string `json:"size"`
 }
 
-// TODO: update
 type Encoding struct {
 	Audio      bool                `json:"audio"`
 	Channel    int                 `json:"channel"`

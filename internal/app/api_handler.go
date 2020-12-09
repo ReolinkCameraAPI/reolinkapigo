@@ -13,6 +13,7 @@ type ApiHandler struct {
 	*api.NetworkMixin
 	*api.PtzMixin
 	*api.RecordingMixin
+	*api.SystemMixin
 }
 
 func NewApiHandler() (*ApiHandler, error) {
@@ -25,5 +26,6 @@ func NewApiHandler() (*ApiHandler, error) {
 		&api.NetworkMixin{},
 		&api.PtzMixin{},
 		&api.RecordingMixin{},
+		&api.SystemMixin{},
 	}, nil
 }
