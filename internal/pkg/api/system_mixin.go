@@ -9,6 +9,65 @@ import (
 
 type SystemMixin struct{}
 
+// Get the general system information
+func (sm *SystemMixin) GetGeneralSystem() func(handler *network.RestHandler) (*models.DeviceGeneralInformation, error) {
+	return func(handler *network.RestHandler) (*models.DeviceGeneralInformation, error) {
+		payloadTime := map[string]interface{}{
+			"cmd":    "GetTime",
+			"action": 1,
+			"param":  map[string]interface{}{},
+		}
+
+		payloadNorm := map[string]interface{}{
+			"cmd":    "GetNorm",
+			"action": 1,
+			"param":  map[string]interface{}{},
+		}
+
+		resultTime, err := handler.Request("POST", payloadTime, "GetTime", true)
+
+		if err != nil {
+			return nil, err
+		}
+
+		resultNorm, err := handler.Request("POST", payloadNorm, "GetNorm", true)
+
+		if err != nil {
+			return nil, err
+		}
+
+		var timeData *models.TimeInformation
+		var dstData *models.DstInformation
+		var normData string
+
+		err = json.Unmarshal(resultTime.Value["Time"], &timeData)
+
+		if err != nil {
+			return nil, err
+		}
+
+		err = json.Unmarshal(resultTime.Value["Dst"], &dstData)
+
+		if err != nil {
+			return nil, err
+		}
+
+		err = json.Unmarshal(resultNorm.Value["Norm"], &normData)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return &models.DeviceGeneralInformation{
+			Time: timeData,
+			Dst:  dstData,
+			Norm: &models.DeviceNorm{
+				Norm: normData,
+			},
+		}, nil
+	}
+}
+
 // Get the camera performance information
 // See examples/responses/GetPerformance.json for example response data
 func (sm *SystemMixin) GetPerformance() func(handler *network.RestHandler) (*models.DevicePerformanceInformation, error) {

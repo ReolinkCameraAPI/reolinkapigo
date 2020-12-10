@@ -12,7 +12,7 @@ func Socks5Example() {
 
 	// Setting the RestHandler to proxy requests through SOCKS
 	// the default protocol is tcp
-	protocol := network.UDP
+	protocol := network.PROTOCOL_UDP
 	socksOptions := network.RestHandlerOptionProxy(network.SOCKS5, "127.0.0.1", 5942, nil, &protocol)
 
 	// This can throw an error due to the API trying to authorise with the camera

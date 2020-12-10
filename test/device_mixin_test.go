@@ -1,18 +1,23 @@
-package api
+package test
 
 import (
 	"encoding/json"
+	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/models"
 	"github.com/ReolinkCameraAPI/reolink-go-api/pkg"
 	"github.com/jarcoal/httpmock"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"testing"
 )
 
-func TestAuthMixin_Login(t *testing.T) {
+func TestDeviceMixin_GetHddInfo(t *testing.T) {
+
 	httpmock.Activate()
 
 	defer httpmock.DeactivateAndReset()
+
+	loginData := &models.LoginToken{LeaseTime: 3600, Name: "12345"}
 
 	httpmock.RegisterResponder("POST", "https://127.0.0.1/cgi-bin/api.cgi",
 		func(req *http.Request) (*http.Response, error) {
@@ -60,13 +65,6 @@ func TestAuthMixin_Login(t *testing.T) {
 				status = 500
 			}
 
-			loginData := map[string]interface{}{
-				"Token": map[string]interface{}{
-					"Value": "12345",
-					"LeaseTime": 3600,
-				},
-			}
-
 			resp, err := httpmock.NewJsonResponse(status, loginData)
 
 			if err != nil {
@@ -87,4 +85,11 @@ func TestAuthMixin_Login(t *testing.T) {
 		t.Logf("login successful")
 	}
 
+	hddInfo, err := camera.API.GetHddInfo()(camera.RestHandler)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	log.Printf("%v", hddInfo)
 }

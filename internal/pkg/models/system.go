@@ -54,5 +54,12 @@ type DevicePerformanceInformation struct {
 	NetThroughput int `json:"netThroughput"`
 }
 
-// TODO: update
-type DeviceReboot struct{}
+type DeviceNorm struct {
+	Norm string `json:"norm"`
+}
+
+type DeviceGeneralInformation struct {
+	Time *TimeInformation
+	Dst  *DstInformation
+	Norm *DeviceNorm
+}

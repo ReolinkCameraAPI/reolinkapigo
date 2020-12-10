@@ -1,25 +1,20 @@
-package api
+package test
 
 import (
 	"encoding/json"
-	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/models"
 	"github.com/ReolinkCameraAPI/reolink-go-api/pkg"
 	"github.com/jarcoal/httpmock"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"testing"
 )
 
-func TestDeviceMixin_GetHddInfo(t *testing.T) {
-
+func TestAuthMixin_Login(t *testing.T) {
 	httpmock.Activate()
 
 	defer httpmock.DeactivateAndReset()
 
-	loginData := &models.Login{Token: models.LoginToken{LeaseTime: 3600, Name: "12345"}}
-
-	httpmock.RegisterResponder("POST", "https://127.0.0.1/cgi-bin/api.cgi",
+	httpmock.RegisterResponder("POST", "http://127.0.0.1/cgi-bin/api.cgi",
 		func(req *http.Request) (*http.Response, error) {
 
 			type User struct {
@@ -28,13 +23,13 @@ func TestDeviceMixin_GetHddInfo(t *testing.T) {
 			}
 
 			type ReqData struct {
-				Cmd    string `json:"cmd"`
-				Action string `json:"action"`
-				Param  map[string]json.RawMessage
+				Cmd    string                     `json:"cmd"`
+				Action int                        `json:"action"`
+				Param  map[string]json.RawMessage `json:"param"`
 			}
 
 			// check the username and password
-			var reqData ReqData
+			var reqData []*ReqData
 
 			data, err := ioutil.ReadAll(req.Body)
 
@@ -50,7 +45,7 @@ func TestDeviceMixin_GetHddInfo(t *testing.T) {
 
 			var user User
 
-			err = json.Unmarshal(reqData.Param["User"], &user)
+			err = json.Unmarshal(reqData[0].Param["User"], &user)
 
 			if err != nil {
 				return httpmock.NewStringResponse(500, err.Error()), nil
@@ -58,20 +53,24 @@ func TestDeviceMixin_GetHddInfo(t *testing.T) {
 
 			var status int
 
-			if user.UserName == "foo" && user.Password == "bar" {
-				status = 200
-
-			} else {
-				status = 500
+			if user.UserName != "foo" || user.Password != "bar" {
+				return httpmock.NewStringResponse(500, "username or password incorrect"), nil
 			}
 
-			resp, err := httpmock.NewJsonResponse(status, loginData)
-
-			if err != nil {
-				return httpmock.NewStringResponse(500, err.Error()), nil
+			loginData := map[string]interface{}{
+				"Token": map[string]interface{}{
+					"Name":     "12345",
+					"LeaseTime": 3600,
+				},
 			}
 
-			return resp, nil
+			generalData := map[string]interface{}{
+				"cmd":   "Login",
+				"code":  0,
+				"value": loginData,
+			}
+
+			return httpmock.NewJsonResponse(status, []interface{}{generalData})
 		},
 	)
 
@@ -85,11 +84,4 @@ func TestDeviceMixin_GetHddInfo(t *testing.T) {
 		t.Logf("login successful")
 	}
 
-	hddInfo, err := camera.API.GetHddInfo()(camera.RestHandler)
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	log.Printf("%v", hddInfo)
 }

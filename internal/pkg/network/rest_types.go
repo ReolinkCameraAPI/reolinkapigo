@@ -15,8 +15,8 @@ func (p Proxy) String() string {
 type Protocol uint
 
 const (
-	UDP Protocol = iota
-	TCP
+	PROTOCOL_UDP Protocol = iota
+	PROTOCOL_TCP
 )
 
 func (p Protocol) String() string {

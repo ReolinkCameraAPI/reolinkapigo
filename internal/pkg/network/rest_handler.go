@@ -57,7 +57,14 @@ func NewRestHandler(host string, options ...OptionRestHandler) *RestHandler {
 	restHandler := &RestHandler{
 		Host:     host,               // the IP only, default scheme is http
 		Port:     0,                  // no port necessary on default config
-		Endpoint: "/cgi-bin/api.cgi", // Default endpoint for the Reolink Camera's
+		Endpoint: "cgi-bin/api.cgi", // Default endpoint for the Reolink Camera's
+		Proxy: nil,
+		HTTPS: false,
+		RestAuth: &RestAuth{
+			Username: "",
+			Password: "",
+			Token:    "",
+		},
 	}
 
 	for _, op := range options {
@@ -256,7 +263,7 @@ func (rh *RestHandler) Request(method string, payload interface{}, command strin
 		return nil, err
 	}
 
-	var result *GeneralData
+	var result []*GeneralData
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
@@ -269,5 +276,5 @@ func (rh *RestHandler) Request(method string, payload interface{}, command strin
 		return nil, err
 	}
 
-	return result, nil
+	return result[0], nil
 }

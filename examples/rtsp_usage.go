@@ -1,12 +1,6 @@
 package examples
 
-import (
-	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/enum"
-	"github.com/ReolinkCameraAPI/reolink-go-api/pkg"
-	"gocv.io/x/gocv"
-)
-
-func RtspUsage() {
+/*func RtspUsage() {
 	// This can throw an error due to the API trying to authorise with the camera
 	camera, err := pkg.NewCamera("foo", "bar", "192.168.1.100")
 
@@ -27,4 +21,4 @@ func RtspUsage() {
 		window.IMShow(*n.Frame)
 		window.WaitKey(1)
 	}
-}
+}*/
