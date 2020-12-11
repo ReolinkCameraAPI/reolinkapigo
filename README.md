@@ -1,4 +1,11 @@
-## Reolink Go Api Client
+<h1 align="center">Reolink Go Api Client<center></h1>
+
+<p align="center">
+	<img alt="GitHub" src="https://img.shields.io/github/license/ReolinkCameraAPI/reolink-go-api?style=flat-square">
+	<img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/ReolinkCameraAPI/reolink-go-api?style=flat-square">
+</p>
+
+---
 
 A Reolink Camera client written in Go.
 
