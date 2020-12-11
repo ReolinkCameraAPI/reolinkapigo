@@ -99,18 +99,21 @@ Setting it up is quite easy, however streaming the video feed needs some extra t
 ffmpeg.
 
 Steps:
-
 - Get rtsp-simple-server (download binary etc.) and Start server.
 - Find a video file and push content to server
 - Run the rtsp test
     
+In your terminal:
 
-    // receives the stream and passes it along to clients
+    //receives the stream and passes it along to clients
+    
     ./rtsp-simple-server
-
+    
     // this will start and encode the stream on the fly
+    
     ffmpeg -re -stream_loop -1 -i vidfile.mkv -c:v libx264 -preset ultrafast -tune zerolatency -b 600k \
     -f rtsp rtsp://localhost:8554/mystream
+
 
 ### API Requests Implementation Plan:
 
