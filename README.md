@@ -118,7 +118,9 @@ In your terminal:
     
     // this will start and encode the stream on the fly
     
-    ffmpeg -re -stream_loop -1 -i vidfile.mkv -c:v libx264 -preset ultrafast -tune zerolatency -b 600k \
+    ffmpeg -re -stream_loop -1 \ 
+    -i vidfile.mkv \
+    -c:a aac -b:a 64k -c:v libx264 -preset ultrafast -b:v 500k -f hls -hls_time 1 -hls_list_size 3 -hls_flags delete_segments -hls_allow_cache 0 \
     -f rtsp rtsp://localhost:8554/mystream
 
 

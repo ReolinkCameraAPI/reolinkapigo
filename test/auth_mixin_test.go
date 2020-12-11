@@ -9,11 +9,7 @@ import (
 	"testing"
 )
 
-func TestAuthMixin_Login(t *testing.T) {
-	httpmock.Activate()
-
-	defer httpmock.DeactivateAndReset()
-
+func registerMockAuth() {
 	httpmock.RegisterResponder("POST", "http://127.0.0.1/cgi-bin/api.cgi",
 		func(req *http.Request) (*http.Response, error) {
 
@@ -59,7 +55,7 @@ func TestAuthMixin_Login(t *testing.T) {
 
 			loginData := map[string]interface{}{
 				"Token": map[string]interface{}{
-					"Name":     "12345",
+					"Name":      "12345",
 					"LeaseTime": 3600,
 				},
 			}
@@ -73,6 +69,14 @@ func TestAuthMixin_Login(t *testing.T) {
 			return httpmock.NewJsonResponse(status, []interface{}{generalData})
 		},
 	)
+}
+
+func TestAuthMixin_Login(t *testing.T) {
+	httpmock.Activate()
+
+	defer httpmock.DeactivateAndReset()
+
+	registerMockAuth()
 
 	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
 
@@ -83,5 +87,4 @@ func TestAuthMixin_Login(t *testing.T) {
 	if camera.RestHandler.Token == "12345" {
 		t.Logf("login successful")
 	}
-
 }
