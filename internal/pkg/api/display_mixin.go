@@ -71,7 +71,7 @@ func (dm *DisplayMixin) GetMask() func(handler *network.RestHandler) (*models.Ma
 			},
 		}
 
-		result, err := handler.Request("GET", payload, "GetMask", true)
+		result, err := handler.Request("POST", payload, "GetMask", true)
 
 		if err != nil {
 			return nil, err
@@ -132,7 +132,7 @@ func (dm *DisplayMixin) SetOSD(osdOption ...OptionOsd) func(handler *network.Res
 			},
 		}
 
-		result, err := handler.Request("GET", payload, "SetOsd", true)
+		result, err := handler.Request("POST", payload, "SetOsd", true)
 
 		if err != nil {
 			return false, err

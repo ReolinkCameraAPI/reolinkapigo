@@ -11,7 +11,8 @@ type Camera struct {
 	RestHandler *network.RestHandler
 }
 
-func NewCamera(username string, password string, ip string, restOptions ...network.OptionRestHandler) (
+func NewCamera(username string, password string, ip string, restOptions ...network.
+	OptionRestHandler) (
 	*Camera, error) {
 	restHandler := network.NewRestHandler(ip, restOptions...)
 
