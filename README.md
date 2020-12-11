@@ -105,12 +105,12 @@ Steps:
 - Run the rtsp test
     
 
-    # receives the stream and passes it along to clients
+    // receives the stream and passes it along to clients
     ./rtsp-simple-server
 
-    # this will start and encode the stream on the fly
-    ffmpeg -re -stream_loop -1 -i vidfile.mkv -c:v libx264 -preset ultrafast -tune zerolatency -b 600k -f rtsp rtsp:
-    //localhost:8554/mystream
+    // this will start and encode the stream on the fly
+    ffmpeg -re -stream_loop -1 -i vidfile.mkv -c:v libx264 -preset ultrafast -tune zerolatency -b 600k \
+    -f rtsp rtsp://localhost:8554/mystream
 
 ### API Requests Implementation Plan:
 
