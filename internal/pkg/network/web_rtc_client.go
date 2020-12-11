@@ -41,6 +41,12 @@ func NewWebRtcClient(rtspClient *RtspClient) *WebRtcClient {
 // Credit for most of this code goes to deepch https://github.com/deepch/RTSPtoWebRTC
 func (wrtc *WebRtcClient) OpenWebRtcStream(c *gin.Context, sdpData string) {
 	if wrtc != nil {
+
+		if wrtc.RTSP.Stream.Codecs == nil {
+			log.Println("Codec error")
+			return
+		}
+
 		sps := wrtc.RTSP.Stream.Codecs[0].(h264parser.CodecData).SPS()
 		pps := wrtc.RTSP.Stream.Codecs[0].(h264parser.CodecData).PPS()
 
@@ -188,6 +194,11 @@ func (wrtc *WebRtcClient) OpenWebRtcStream(c *gin.Context, sdpData string) {
 			return
 		}
 
+		if err = peerConnection.SetLocalDescription(peerAnswer); err != nil {
+			log.Println("SetLocalDescription error", err)
+			return
+		}
+
 		_, err = c.Writer.Write([]byte(base64.StdEncoding.EncodeToString([]byte(peerAnswer.SDP))))
 
 		if err != nil {
@@ -239,7 +250,6 @@ func (wrtc *WebRtcClient) OpenWebRtcStream(c *gin.Context, sdpData string) {
 						case <-peerConnectionControl:
 							return
 						case pkt := <-rtspPacketChannel:
-							log.Printf("still running")
 							if pkt.IsKeyFrame {
 								// is a keyframe indicating it should start
 								start = true
