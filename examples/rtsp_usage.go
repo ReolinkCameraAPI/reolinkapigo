@@ -69,23 +69,18 @@ func (s *Stream) handlerStream(c *gin.Context) {
 		webRtcStream := network.NewWebRtcClient(currentRtsp)
 
 		// TODO:
-		go webRtcStream.OpenWebRtcStream(nil, sdpData)
+		go webRtcStream.OpenWebRtcStream(sdpData)
 
-		for {
-			select {
-			case sdp := <-webRtcStream.SDP:
-				log.Println("Writing SDP")
-				_, err := c.Writer.Write([]byte(sdp))
-				if err != nil {
-					log.Println("Writing SDP error", err)
-					return
-				}
-			case <-webRtcStream.Ready:
-				log.Println("webrtc ready")
+		select {
+		case sdp := <-webRtcStream.SDP:
+			log.Println("Writing SDP")
+			_, err := c.Writer.Write([]byte(sdp))
+			if err != nil {
+				log.Println("Writing SDP error", err)
 				return
 			}
-		}
 
+		}
 	}
 
 	return
@@ -121,28 +116,9 @@ func (s *Stream) webServer() *sync.WaitGroup {
 				"version":  time.Now().String(),
 			})
 		})
-		router.POST("/recive", func(context *gin.Context) {
-			fmt.Println("New Client connected")
 
-			context.Header("Access-Control-Allow-Origin", "*")
-			sdpData := context.PostForm("data")
-			streamUUID := context.PostForm("streamUUID")
+		router.POST("/recive", s.handlerStream)
 
-			var currentRtsp *network.RtspClient
-
-			for _, rc := range s.RtspClients {
-				if rc.UUID == streamUUID {
-					currentRtsp = rc
-					break
-				}
-			}
-
-			if currentRtsp != nil {
-				webRtcStream := network.NewWebRtcClient(currentRtsp)
-
-				webRtcStream.OpenWebRtcStream(context, sdpData)
-			}
-		})
 		router.GET("/codec/:uuid", func(c *gin.Context) {
 			c.Header("Access-Control-Allow-Origin", "*")
 			if s.RtspClients == nil {

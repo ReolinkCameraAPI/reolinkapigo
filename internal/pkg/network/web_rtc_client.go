@@ -14,7 +14,6 @@ import (
 	"github.com/deepch/vdk/av"
 	"github.com/deepch/vdk/codec/h264parser"
 	"github.com/dgryski/trifles/uuid"
-	"github.com/gin-gonic/gin"
 	"github.com/pion/webrtc/v2"
 	"github.com/pion/webrtc/v2/pkg/media"
 	"log"
@@ -39,7 +38,7 @@ func NewWebRtcClient(rtspClient *RtspClient) *WebRtcClient {
 
 // Open a WebRTC Stream from the RTSP Stream
 // Credit for most of this code goes to deepch https://github.com/deepch/RTSPtoWebRTC
-func (wrtc *WebRtcClient) OpenWebRtcStream(c *gin.Context, sdpData string) {
+func (wrtc *WebRtcClient) OpenWebRtcStream(sdpData string) {
 	if wrtc != nil {
 
 		if wrtc.RTSP.Stream.Codecs == nil {
@@ -199,12 +198,12 @@ func (wrtc *WebRtcClient) OpenWebRtcStream(c *gin.Context, sdpData string) {
 			return
 		}
 
-		_, err = c.Writer.Write([]byte(base64.StdEncoding.EncodeToString([]byte(peerAnswer.SDP))))
+		wrtc.SDP <- base64.StdEncoding.EncodeToString([]byte(peerAnswer.SDP))
 
-		if err != nil {
+		/*if err != nil {
 			log.Println("Writing SDP error", err)
 			return
-		}
+		}*/
 
 		peerConnectionControl := make(chan bool, 10)
 
