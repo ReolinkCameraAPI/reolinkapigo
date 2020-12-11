@@ -3,10 +3,11 @@
 A Reolink Camera client written in Go.
 
 Other Supported Languages:
- - Python: [reolink-python-api](https://github.com/ReolinkCameraApi/reolink-python-api)
- 
-The reolink-go-api project is the go alternative to the reolink-python-api project.
-It provides the same functionality, but just in pure Go.
+
+- Python: [reolink-python-api](https://github.com/ReolinkCameraApi/reolink-python-api)
+
+The reolink-go-api project is the go alternative to the reolink-python-api project. It provides the same functionality,
+but just in pure Go.
 
 ### WARNING...This is an untested repository and is in heavy development
 
@@ -14,10 +15,35 @@ It provides the same functionality, but just in pure Go.
 
     https://discord.gg/8z3fdAmZJP
 
+### Get started
+
+### Usage
+
+Check the `examples/` directory for example code and implementations.
+
+Implement a "Camera" object by passing it an IP address, Username and Password. By instantiating the object, it will try
+retrieve a login token from the Reolink Camera. This token is necessary to interact with the Camera using other
+commands.
+
+    // This can throw an error due to the API trying to authorise with the camera
+    // to retrieve the necessary token for future requests.
+	camera, err := pkg.NewCamera("foo", "bar", "192.168.1.100")
+
+    // now call any of the supported api's by passing it it's resthandler
+    ok, err := camera.API.FormatHdd(0)(camera.RestHandler)
+
+Dependencies needed to make this work:
+
+- [Deepch's VDK](github.com/deepch/vdk)
+- [Pions's WebRTC](github.com/pion/webrtc/v2)
+
+Dependencies needed for testing:
+- [Gin](github.com/gin-gonic/gin)
+- [HttpMock](github.com/jarcoal/httpmock)
+
 ### Purpose
 
-This repository's purpose is to deliver a complete API for the Reolink Camera's, ( TESTED on RLC-411WS )
-
+This repository's purpose is to deliver a complete API for the Reolink Camera's.
 
 ### But Reolink gives an API in their documentation
 
@@ -25,24 +51,19 @@ Not really. They only deliver a really basic API to retrieve Image data and Vide
 
 ### How?
 
-You can get the Restful API calls by looking through the HTTP Requests made the camera web console. I use Google Chrome developer mode (ctr + shift + i) -> Network.
+You can get the Restful API calls by looking through the HTTP Requests made the camera web console. I use Google Chrome
+developer mode (ctr + shift + i) -> Network.
 
-### Get started
 
-Implement a "Camera" object by passing it an IP address, Username and Password. 
-By instantiating the object, it will try retrieve a login token from the Reolink Camera.
-This token is necessary to interact with the Camera using other commands.
+## Contributors
 
-Dependencies needed to make this work:
-
- - [GoCV](https://gocv.io)
-
+---
 ### Styling and Standards
 
 Golang project structure based off of https://github.com/golang-standards/project-layout
-    
+
 Writing functions/structs with a lot of parameters
-    
+
     function HasManyParameters(
             param1 string,
             param2 int,
@@ -52,27 +73,54 @@ Writing functions/structs with a lot of parameters
     ) {
        // Write your code here
     }
-    
+
 All variables are camelCase
-    
+
     var someVariable1 string
-    
+
 Package names are all lowercase and if two or more words, camelCase
 
     package foo
     package fooBar
-    
+
 Go files are lowercase and if two or more words, snake_case
 
     foo.go
     foo_bar.go
 
+### Test without a camera
+
+All the tests implement a MockApi. The only test that could be a bit tricky is the RTSP client test.
+
+To test this locally on your machine you could use the [rtsp-simple-server](https://github.com/aler9/rtsp-simple-server)
+
+
+Setting it up is quite easy, however streaming the video feed needs some extra thought, especially if you are new to
+ffmpeg.
+
+Steps:
+
+- Get rtsp-simple-server (download binary etc.) and Start server.
+- Find a video file and push content to server
+- Run the rtsp test
     
+
+    # receives the stream and passes it along to clients
+    ./rtsp-simple-server
+
+    # this will start and encode the stream on the fly
+    ffmpeg -re -stream_loop -1 -i vidfile.mkv -c:v libx264 -preset ultrafast -tune zerolatency -b 600k -f rtsp rtsp:
+    //localhost:8554/mystream
 
 ### API Requests Implementation Plan:
 
+Stream:
+- [X] RTSP
+- [X] WebRTC
+
 GET:
-- [ ] Login
+
+- [X] Login
 - [ ] Logout
 - [ ] Display -> OSD
 - [ ] Recording -> Encode (Clear and Fluent Stream)
@@ -103,6 +151,7 @@ GET:
 - [ ] Image Data -> "Snap" Frame from Video Stream
 
 SET:
+
 - [ ] Display -> OSD
 - [ ] Recording -> Encode (Clear and Fluent Stream)
 - [ ] Recording -> Advance (Scheduling)
@@ -127,3 +176,14 @@ SET:
 - [ ] Focus
 - [ ] Image (Brightness, Contrast, Saturation, Hue, Sharp, Mirror, Rotate)
 - [ ] Advanced Image (Anti-flicker, Exposure, White Balance, DayNight, Backlight, LED light, 3D-NR)
+
+### Supported Camera's
+
+Any Reolink camera that has a web UI should work. The other's requiring special Reolink clients
+do not work and is not supported here.
+
+- RLC-411WS
+
+### Integrated source code from:
+
+- [RTSPtoWebRTC by Deepch](https://github.com/deepch/RTSPtoWebRTC)
