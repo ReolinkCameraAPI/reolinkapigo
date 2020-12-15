@@ -3,8 +3,8 @@ package enum
 type UserLevel uint
 
 const (
-	GUEST UserLevel = iota
-	ADMIN
+	USER_LEVEL_GUEST UserLevel = iota
+	USER_LEVEL_ADMIN
 )
 
 func (ul UserLevel) Value() string {
