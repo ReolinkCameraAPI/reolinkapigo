@@ -52,7 +52,7 @@ func (sm *SystemMixin) GetGeneralSystem() func(handler *network.RestHandler) (*m
 			return nil, err
 		}
 
-		err = json.Unmarshal(resultNorm.Value["Norm"], &normData)
+		err = json.Unmarshal(resultNorm.Value["norm"], &normData)
 
 		if err != nil {
 			return nil, err
@@ -86,7 +86,7 @@ func (sm *SystemMixin) GetPerformance() func(handler *network.RestHandler) (*mod
 
 		var devicePerformance *models.DevicePerformanceInformation
 
-		err = json.Unmarshal(result.Value["GetPerformance"], &devicePerformance)
+		err = json.Unmarshal(result.Value["Performance"], &devicePerformance)
 
 		if err != nil {
 			return nil, err
