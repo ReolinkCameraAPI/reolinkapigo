@@ -10,8 +10,7 @@ import (
 	"time"
 )
 
-type RtspMixin struct {
-}
+type RtspMixin struct {}
 
 type RtspStream struct {
 	Frame []av.CodecData

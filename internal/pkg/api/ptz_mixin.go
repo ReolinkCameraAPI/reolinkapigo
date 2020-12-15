@@ -3,12 +3,10 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/models"
 	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/network"
 )
 
-type PtzMixin struct {
-}
+type PtzMixin struct {}
 
 type ptzOperationOptions struct {
 	Operation string
@@ -64,11 +62,12 @@ func ptzOperation(ptzOperation *ptzOperationOptions) interface{} {
 
 // Moves the camera to the specified preset
 // The preset index and speed is optional and will fallback to defaults
+// One can also force the preset to have no index by passing api.PtzOptionOpsIndex(nil)
 // Defaults:
 // index: 1
 // speed: 60
 func (pm *PtzMixin) GoToPreset(ptzOptions ...OptionPtzOperation) func(handler *network.RestHandler) (
-	*models.PtzOperation, error) {
+	bool, error) {
 	speed := 60
 	index := 1
 
@@ -82,23 +81,27 @@ func (pm *PtzMixin) GoToPreset(ptzOptions ...OptionPtzOperation) func(handler *n
 		op(ptzPreset)
 	}
 
-	return func(handler *network.RestHandler) (*models.PtzOperation, error) {
+	return func(handler *network.RestHandler) (bool, error) {
 		payload := ptzOperation(ptzPreset)
 		result, err := handler.Request("POST", payload, "PtzCtrl", true)
 
 		if err != nil {
-			return nil, err
+			return false, err
 		}
 
-		var ptzOperation *models.PtzOperation
-		// TODO: will need to confirm this
-		err = json.Unmarshal(result.Value["Ptz"], ptzOperation)
+		var respCode int
+
+		err = json.Unmarshal(result.Value["rspCode"], &respCode)
 
 		if err != nil {
-			return nil, err
+			return false, err
 		}
 
-		return ptzOperation, nil
+		if respCode == 200 {
+			return true, nil
+		}
+
+		return false, fmt.Errorf("camera could not go to ptz preset. camera responded with %v", result.Value)
 	}
 }
 
@@ -626,9 +629,9 @@ func PtzOptionOpsSpeed(speed int) OptionPtzOperation {
 }
 
 // Set the Ptz Operation Index
-func PtzOptionOpsIndex(index int) OptionPtzOperation {
+func PtzOptionOpsIndex(index *int) OptionPtzOperation {
 	return func(p *ptzOperationOptions) {
-		p.Index = &index
+		p.Index = index
 	}
 }
 
