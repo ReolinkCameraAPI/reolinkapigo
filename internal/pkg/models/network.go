@@ -55,7 +55,7 @@ type NetworkEmail struct {
 	Schedule   Schedule `json:"schedule"`
 	SmtpPort   int      `json:"smtpPort"`
 	SmtpServer string   `json:"smtpServer"`
-	SSL        string   `json:"ssl"`
+	SSL        bool     `json:"ssl"`
 }
 
 type NetworkFTP struct {
