@@ -1,10 +1,11 @@
 <h1 align="center">Reolink Go Api Client</h1>
 
 <p align="center">
-    <img alt="Reolink Approval" src="https://img.shields.io/badge/reolink-approved-blue?style=flat-square">
+    	<img alt="Reolink Approval" src="https://img.shields.io/badge/reolink-approved-blue?style=flat-square">
 	<img alt="GitHub" src="https://img.shields.io/github/license/ReolinkCameraAPI/reolink-go-api?style=flat-square">
 	<img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/ReolinkCameraAPI/reolink-go-api?style=flat-square">
-    <img alt="Discord" src="https://img.shields.io/discord/773257004911034389?style=flat-square">
+	<img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/v/tag/ReolinkCameraApi/reolink-go-api?style=flat-square">
+   	<img alt="Discord" src="https://img.shields.io/discord/773257004911034389?style=flat-square">
 </p>
 
 ---
