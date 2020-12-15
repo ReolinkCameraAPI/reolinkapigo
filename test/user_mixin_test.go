@@ -241,7 +241,11 @@ func registerMockDeleteUser() {
 				return httpmock.NewStringResponse(500, err.Error()), nil
 			}
 
+<<<<<<< HEAD
 			var user *models.User
+=======
+			var user string
+>>>>>>> main
 
 			err = json.Unmarshal(reqData[0].Param["User"], &user)
 
@@ -249,7 +253,11 @@ func registerMockDeleteUser() {
 				return httpmock.NewStringResponse(500, err.Error()), nil
 			}
 
+<<<<<<< HEAD
 			log.Printf("modifying user %v", user)
+=======
+			log.Printf("modifying user %s", user)
+>>>>>>> main
 
 			generalData := map[string]interface{}{
 				"cmd":  "DelUser",
@@ -392,7 +400,7 @@ func TestUserMixin_DeleteUser(t *testing.T) {
 	if camera.RestHandler.Token == "12345" {
 		t.Logf("login successful")
 	}
-
+	
 	registerMockDeleteUser()
 
 	ok, err := camera.API.DeleteUser("user1234")(camera.RestHandler)
