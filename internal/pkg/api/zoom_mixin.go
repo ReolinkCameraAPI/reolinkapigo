@@ -260,7 +260,7 @@ func (zfm *ZoomFocusMixin) StartFocusingOut(focusOptions ...OptionFocusOperation
 func (zfm *ZoomFocusMixin) StopFocusing() func(handler *network.RestHandler) (bool, error) {
 
 	focusOps := &focus{
-		operation: "FocusDec",
+		operation: "Stop",
 		speed:     nil,
 	}
 
