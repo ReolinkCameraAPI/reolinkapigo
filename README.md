@@ -1,13 +1,19 @@
-<h1 align="center">Reolink Go Api Client<center></h1>
+<h1 align="center">Reolink Go Api Client</h1>
 
 <p align="center">
+    <img alt="Reolink Approval" src="https://img.shields.io/badge/reolink-approved-blue?style=flat-square">
 	<img alt="GitHub" src="https://img.shields.io/github/license/ReolinkCameraAPI/reolink-go-api?style=flat-square">
 	<img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/ReolinkCameraAPI/reolink-go-api?style=flat-square">
+    <img alt="Discord" src="https://img.shields.io/discord/773257004911034389?style=flat-square">
 </p>
 
 ---
 
-A Reolink Camera client written in Go.
+A Reolink Camera client written in Go. This repository's 
+purpose **(with Reolink's full support)** is to deliver a 
+complete API for the Reolink Cameras,
+although they have a basic API document - it does not satisfy the 
+need for extensive camera communication.
 
 Other Supported Languages:
 
@@ -48,19 +54,6 @@ Dependencies needed for testing:
 - [Gin](github.com/gin-gonic/gin)
 - [HttpMock](github.com/jarcoal/httpmock)
 
-### Purpose
-
-This repository's purpose is to deliver a complete API for the Reolink Camera's.
-
-### But Reolink gives an API in their documentation
-
-Not really. They only deliver a really basic API to retrieve Image data and Video data.
-
-### How?
-
-You can get the Restful API calls by looking through the HTTP Requests made the camera web console. I use Google Chrome
-developer mode (ctr + shift + i) -> Network.
-
 
 ## Contributors
 
@@ -94,6 +87,20 @@ Go files are lowercase and if two or more words, snake_case
 
     foo.go
     foo_bar.go
+
+### How can I become a contributor?
+
+#### Step 1
+
+Get the Restful API calls by looking through the HTTP Requests made in the camera's web UI. I use Google Chrome developer mode (ctr + shift + i) -> Network.
+
+#### Step 2
+
+Fork the repository and make your changes.
+
+#### Step 3
+
+Make a pull request.
 
 ### Test without a camera
 
@@ -195,6 +202,10 @@ Any Reolink camera that has a web UI should work. The other's requiring special 
 do not work and is not supported here.
 
 - RLC-411WS
+- RLC-423
+- RLC-420-5MP
+- RLC-410-5MP
+- RLC-520
 
 ### Integrated source code from:
 
