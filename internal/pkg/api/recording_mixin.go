@@ -130,7 +130,7 @@ func (rm *RecordingMixin) SetRecordingEncoding(encodingOptions ...OptionRecordin
 					"subStream": map[string]interface{}{
 						"bitRate":   encoding.subBitRate,
 						"frameRate": encoding.subFrameRate,
-						"profile":   encoding.subFrameRate,
+						"profile":   encoding.subProfile,
 						"size":      encoding.subSize,
 					},
 				},

@@ -3,9 +3,9 @@ package enum
 type PostRecord uint
 
 const (
-	SECONDS_15 PostRecord = iota
-	SECONDS_30
-	MINUTE_1
+	POST_RECORD_SECONDS_15 PostRecord = iota
+	POST_RECORD_SECONDS_30
+	POST_RECORD_MINUTE_1
 )
 
 func (pr PostRecord) Value() string {
