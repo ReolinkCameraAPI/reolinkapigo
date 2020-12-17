@@ -3,8 +3,8 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/enum"
-	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapi/internal/pkg/enum"
+	"github.com/ReolinkCameraAPI/reolinkapi/internal/pkg/network"
 )
 
 type ImageMixin struct {

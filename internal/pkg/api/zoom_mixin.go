@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapi/internal/pkg/network"
 )
 
 type ZoomFocusMixin struct{}

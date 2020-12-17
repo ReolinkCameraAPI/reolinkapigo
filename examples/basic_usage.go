@@ -1,6 +1,6 @@
 package examples
 
-import "github.com/ReolinkCameraAPI/reolink-go-api/pkg"
+import "github.com/ReolinkCameraAPI/reolinkapi/pkg"
 
 func BasicUsage() {
 

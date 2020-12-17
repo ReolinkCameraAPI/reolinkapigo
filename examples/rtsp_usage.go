@@ -3,7 +3,7 @@ package examples
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapi/internal/pkg/network"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

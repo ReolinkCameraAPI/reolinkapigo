@@ -2,8 +2,8 @@ package pkg
 
 import (
 	"fmt"
-	"github.com/ReolinkCameraAPI/reolink-go-api/internal/app"
-	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapi/internal/app"
+	"github.com/ReolinkCameraAPI/reolinkapi/internal/pkg/network"
 )
 
 type Camera struct {

@@ -2,8 +2,8 @@ package test
 
 import (
 	"encoding/json"
-	"github.com/ReolinkCameraAPI/reolink-go-api/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolink-go-api/pkg"
+	"github.com/ReolinkCameraAPI/reolinkapi/internal/pkg/models"
+	"github.com/ReolinkCameraAPI/reolinkapi/pkg"
 	"github.com/jarcoal/httpmock"
 	"io/ioutil"
 	"log"
