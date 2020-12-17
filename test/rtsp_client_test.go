@@ -3,8 +3,8 @@ package test
 import (
 	"bytes"
 	"fmt"
-	"github.com/ReolinkCameraAPI/reolinkapi/examples"
-	"github.com/ReolinkCameraAPI/reolinkapi/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/examples"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
 	"image"
 	"testing"
 	"time"

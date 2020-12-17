@@ -3,8 +3,8 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ReolinkCameraAPI/reolinkapi/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapi/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
 )
 
 type SystemMixin struct{}

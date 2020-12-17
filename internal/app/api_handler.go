@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/ReolinkCameraAPI/reolinkapi/internal/pkg/api"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/api"
 )
 
 type ApiHandler struct {

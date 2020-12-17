@@ -1,8 +1,8 @@
 package examples
 
 import (
-	"github.com/ReolinkCameraAPI/reolinkapi/internal/pkg/network"
-	"github.com/ReolinkCameraAPI/reolinkapi/pkg"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/pkg"
 )
 
 func Socks5Example() {

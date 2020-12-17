@@ -29,6 +29,15 @@ but just in pure Go.
 
     https://discord.gg/8z3fdAmZJP
 
+### Sponsorship
+
+<a href="https://oleaintueri.com"><img src="https://oleaintueri.com/images/oliv.svg" width="60px"/><img width="200px" style="padding-bottom: 10px" src="https://oleaintueri.com/images/oleaintueri.svg"/></a>
+
+[Oleaintueri](https://oleaintueri.com) is sponsoring the development and maintenance of these projects within their organisation.
+
+
+---
+
 ## Get started
 
 ### Installation
@@ -43,7 +52,7 @@ Implement a "Camera" object by passing it an IP address, Username and Password. 
 retrieve a login token from the Reolink Camera. This token is necessary to interact with the Camera using other
 commands.
 
-    import "github.com/ReolinkCameraApi/reolinkapi"
+    import "github.com/ReolinkCameraApi/reolinkapigo"
 
     // This can throw an error due to the API trying to authorise with the camera
     // to retrieve the necessary token for future requests.

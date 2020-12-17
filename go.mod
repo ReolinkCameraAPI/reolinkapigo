@@ -1,4 +1,4 @@
-module github.com/ReolinkCameraAPI/reolinkapi
+module github.com/ReolinkCameraAPI/reolinkapigo
 
 go 1.14
 
