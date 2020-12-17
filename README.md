@@ -16,6 +16,8 @@ complete API for the Reolink Cameras,
 although they have a basic API document - it does not satisfy the 
 need for extensive camera communication.
 
+Check out our documentation for more information on how to use the software at [https://reolink.oleaintueri.com](https://oleaintueri.com)
+
 Other Supported Languages:
 
 - Python: [reolink-python-api](https://github.com/ReolinkCameraApi/reolink-python-api)
