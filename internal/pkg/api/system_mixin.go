@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
 )
 
 type SystemMixin struct{}
 
 // Get the general system information
-func (sm *SystemMixin) GetGeneralSystem() func(handler *network.RestHandler) (*models.DeviceGeneralInformation, error) {
-	return func(handler *network.RestHandler) (*models.DeviceGeneralInformation, error) {
+func (sm *SystemMixin) GetGeneralSystem() func(handler *rest.RestHandler) (*models.DeviceGeneralInformation, error) {
+	return func(handler *rest.RestHandler) (*models.DeviceGeneralInformation, error) {
 		payloadTime := map[string]interface{}{
 			"cmd":    "GetTime",
 			"action": 1,
@@ -24,13 +24,13 @@ func (sm *SystemMixin) GetGeneralSystem() func(handler *network.RestHandler) (*m
 			"param":  map[string]interface{}{},
 		}
 
-		resultTime, err := handler.Request("POST", payloadTime, "GetTime", true)
+		resultTime, err := handler.Request("POST", payloadTime, "GetTime")
 
 		if err != nil {
 			return nil, err
 		}
 
-		resultNorm, err := handler.Request("POST", payloadNorm, "GetNorm", true)
+		resultNorm, err := handler.Request("POST", payloadNorm, "GetNorm")
 
 		if err != nil {
 			return nil, err
@@ -70,15 +70,15 @@ func (sm *SystemMixin) GetGeneralSystem() func(handler *network.RestHandler) (*m
 
 // Get the camera performance information
 // See examples/responses/GetPerformance.json for example response data
-func (sm *SystemMixin) GetPerformance() func(handler *network.RestHandler) (*models.DevicePerformanceInformation, error) {
-	return func(handler *network.RestHandler) (*models.DevicePerformanceInformation, error) {
+func (sm *SystemMixin) GetPerformance() func(handler *rest.RestHandler) (*models.DevicePerformanceInformation, error) {
+	return func(handler *rest.RestHandler) (*models.DevicePerformanceInformation, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetPerformance",
 			"action": 0,
 			"param":  map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetPerformance", true)
+		result, err := handler.Request("POST", payload, "GetPerformance")
 
 		if err != nil {
 			return nil, err
@@ -98,15 +98,15 @@ func (sm *SystemMixin) GetPerformance() func(handler *network.RestHandler) (*mod
 
 // Get the camera device information
 // See examples/responses/GetDevInfo.json for example response data
-func (sm *SystemMixin) GetDeviceInformation() func(handler *network.RestHandler) (*models.DeviceInformation, error) {
-	return func(handler *network.RestHandler) (*models.DeviceInformation, error) {
+func (sm *SystemMixin) GetDeviceInformation() func(handler *rest.RestHandler) (*models.DeviceInformation, error) {
+	return func(handler *rest.RestHandler) (*models.DeviceInformation, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetDevInfo",
 			"action": 0,
 			"param":  map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetDevInfo", true)
+		result, err := handler.Request("POST", payload, "GetDevInfo")
 
 		if err != nil {
 			return nil, err
@@ -125,15 +125,15 @@ func (sm *SystemMixin) GetDeviceInformation() func(handler *network.RestHandler)
 }
 
 // Reboot the camera
-func (sm *SystemMixin) RebootCamera() func(handler *network.RestHandler) (bool, error) {
-	return func(handler *network.RestHandler) (bool, error) {
+func (sm *SystemMixin) RebootCamera() func(handler *rest.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := map[string]interface{}{
 			"cmd":    "Reboot",
 			"action": 0,
 			"param":  map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "Reboot", true)
+		result, err := handler.Request("POST", payload, "Reboot")
 
 		if err != nil {
 			return false, err
@@ -157,16 +157,16 @@ func (sm *SystemMixin) RebootCamera() func(handler *network.RestHandler) (bool, 
 
 // Get the camera DST information
 // See examples/response/GetDSTInfo.json for example response data
-func (sm *SystemMixin) GetDstInformation() func(handler *network.RestHandler) (*models.DstInformation,
+func (sm *SystemMixin) GetDstInformation() func(handler *rest.RestHandler) (*models.DstInformation,
 	*models.TimeInformation, error) {
-	return func(handler *network.RestHandler) (*models.DstInformation, *models.TimeInformation, error) {
+	return func(handler *rest.RestHandler) (*models.DstInformation, *models.TimeInformation, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetTime",
 			"action": 0,
 			"param":  map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetTime", true)
+		result, err := handler.Request("POST", payload, "GetTime")
 
 		if err != nil {
 			return nil, nil, err

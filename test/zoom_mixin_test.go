@@ -2,7 +2,7 @@ package test
 
 import (
 	"encoding/json"
-	"github.com/ReolinkCameraAPI/reolinkapigo/pkg"
+	"github.com/ReolinkCameraAPI/reolinkapigo/pkg/reolinkapi"
 	"github.com/jarcoal/httpmock"
 	"io/ioutil"
 	"log"
@@ -114,19 +114,19 @@ func TestZoomMixin_StartZoomingIn(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockZoomOperation()
 
-	ok, err := camera.API.StartZoomingIn()(camera.RestHandler)
+	ok, err := camera.StartZoomingIn()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -141,19 +141,19 @@ func TestZoomMixin_StartZoomingOut(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockZoomOperation()
 
-	ok, err := camera.API.StartZoomingOut()(camera.RestHandler)
+	ok, err := camera.StartZoomingOut()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -168,19 +168,19 @@ func TestZoomMixin_StopZooming(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockZoomOperation()
 
-	ok, err := camera.API.StopZooming()(camera.RestHandler)
+	ok, err := camera.StopZooming()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -195,19 +195,19 @@ func TestZoomMixin_StartFocusingIn(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockFocusOperation()
 
-	ok, err := camera.API.StartFocusingIn()(camera.RestHandler)
+	ok, err := camera.StartFocusingIn()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -222,19 +222,19 @@ func TestZoomMixin_StartFocusingOut(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockFocusOperation()
 
-	ok, err := camera.API.StartFocusingOut()(camera.RestHandler)
+	ok, err := camera.StartFocusingOut()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -249,19 +249,19 @@ func TestZoomMixin_StopFocusing(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockFocusOperation()
 
-	ok, err := camera.API.StopFocusing()(camera.RestHandler)
+	ok, err := camera.StopFocusing()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)

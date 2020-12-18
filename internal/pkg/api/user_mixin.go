@@ -5,21 +5,21 @@ import (
 	"fmt"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/enum"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
 )
 
 type UserMixin struct{}
 
 // Retrieves a slice of Online Users
-func (um *UserMixin) GetOnlineUsers() func(handler *network.RestHandler) ([]*models.User, error) {
-	return func(handler *network.RestHandler) ([]*models.User, error) {
+func (um *UserMixin) GetOnlineUsers() func(handler *rest.RestHandler) ([]*models.User, error) {
+	return func(handler *rest.RestHandler) ([]*models.User, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetOnline",
 			"action": 1,
 			"param":  map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetOnline", true)
+		result, err := handler.Request("POST", payload, "GetOnline")
 
 		if err != nil {
 			return nil, err
@@ -38,15 +38,15 @@ func (um *UserMixin) GetOnlineUsers() func(handler *network.RestHandler) ([]*mod
 }
 
 // Retrieves a slice of Users
-func (um *UserMixin) GetUsers() func(handler *network.RestHandler) ([]*models.User, error) {
-	return func(handler *network.RestHandler) ([]*models.User, error) {
+func (um *UserMixin) GetUsers() func(handler *rest.RestHandler) ([]*models.User, error) {
+	return func(handler *rest.RestHandler) ([]*models.User, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetUser",
 			"action": 1,
 			"param":  map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetUser", true)
+		result, err := handler.Request("POST", payload, "GetUser")
 
 		if err != nil {
 			return nil, err
@@ -68,8 +68,8 @@ func (um *UserMixin) GetUsers() func(handler *network.RestHandler) ([]*models.Us
 func (um *UserMixin) AddUser(
 	username string,
 	password string,
-	level enum.UserLevel) func(handler *network.RestHandler) (bool, error) {
-	return func(handler *network.RestHandler) (bool, error) {
+	level enum.UserLevel) func(handler *rest.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := map[string]interface{}{
 			"cmd":    "AddUser",
 			"action": 0,
@@ -82,7 +82,7 @@ func (um *UserMixin) AddUser(
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "AddUser", true)
+		result, err := handler.Request("POST", payload, "AddUser")
 
 		if err != nil {
 			return false, err
@@ -101,9 +101,9 @@ func (um *UserMixin) AddUser(
 }
 
 // Update the User's password
-func (um *UserMixin) UpdateUserPassword(username string, password string) func(handler *network.RestHandler) (bool,
+func (um *UserMixin) UpdateUserPassword(username string, password string) func(handler *rest.RestHandler) (bool,
 	error) {
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := map[string]interface{}{
 			"cmd":    "ModifyUser",
 			"action": 0,
@@ -115,7 +115,7 @@ func (um *UserMixin) UpdateUserPassword(username string, password string) func(h
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "ModifyUser", true)
+		result, err := handler.Request("POST", payload, "ModifyUser")
 
 		if err != nil {
 			return false, err
@@ -138,8 +138,8 @@ func (um *UserMixin) UpdateUserPassword(username string, password string) func(h
 }
 
 // Delete the User account
-func (um *UserMixin) DeleteUser(username string) func(handler *network.RestHandler) (bool, error) {
-	return func(handler *network.RestHandler) (bool, error) {
+func (um *UserMixin) DeleteUser(username string) func(handler *rest.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := map[string]interface{}{
 			"cmd":    "DelUser",
 			"action": 0,
@@ -150,7 +150,7 @@ func (um *UserMixin) DeleteUser(username string) func(handler *network.RestHandl
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "DelUser", true)
+		result, err := handler.Request("POST", payload, "DelUser")
 
 		if err != nil {
 			return false, err

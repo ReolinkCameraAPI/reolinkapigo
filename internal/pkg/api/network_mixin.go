@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
 )
 
 type NetworkMixin struct {
@@ -29,7 +29,7 @@ type NetworkPortOptions func(*networkPorts)
 // onvif: 8000
 // rtmp: 1935
 // rtsp: 554
-func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...NetworkPortOptions) func(handler *network.RestHandler) (bool,
+func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...NetworkPortOptions) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	// Defaults
@@ -46,7 +46,7 @@ func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...NetworkPortOptions)
 		op(networkPorts)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := map[string]interface{}{
 			"cmd":    "SetNetPort",
 			"action": 0,
@@ -62,7 +62,7 @@ func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...NetworkPortOptions)
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "SetNetPort", true)
+		result, err := handler.Request("POST", payload, "SetNetPort")
 
 		if err != nil {
 			return false, err
@@ -85,8 +85,8 @@ func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...NetworkPortOptions)
 }
 
 // Set the camera's wifi settings
-func (nm *NetworkMixin) SetWifi(ssid string, password string) func(handler *network.RestHandler) (bool, error) {
-	return func(handler *network.RestHandler) (bool, error) {
+func (nm *NetworkMixin) SetWifi(ssid string, password string) func(handler *rest.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := map[string]interface{}{
 			"cmd":    "SetWifi",
 			"action": 0,
@@ -98,7 +98,7 @@ func (nm *NetworkMixin) SetWifi(ssid string, password string) func(handler *netw
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "SetWifi", true)
+		result, err := handler.Request("POST", payload, "SetWifi")
 
 		if err != nil {
 			return false, err
@@ -121,15 +121,15 @@ func (nm *NetworkMixin) SetWifi(ssid string, password string) func(handler *netw
 }
 
 // Get the current camera's wifi settings
-func (nm *NetworkMixin) GetWifi() func(handler *network.RestHandler) (*models.Wifi, error) {
-	return func(handler *network.RestHandler) (*models.Wifi, error) {
+func (nm *NetworkMixin) GetWifi() func(handler *rest.RestHandler) (*models.Wifi, error) {
+	return func(handler *rest.RestHandler) (*models.Wifi, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetWifi",
 			"action": 1,
 			"param": map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetWifi", true)
+		result, err := handler.Request("POST", payload, "GetWifi")
 
 		if err != nil {
 			return nil, err
@@ -148,15 +148,15 @@ func (nm *NetworkMixin) GetWifi() func(handler *network.RestHandler) (*models.Wi
 }
 
 // Scan the current camera's wifi network
-func (nm *NetworkMixin) ScanWifi() func(handler *network.RestHandler) (*models.ScanWifi, error) {
-	return func(handler *network.RestHandler) (*models.ScanWifi, error) {
+func (nm *NetworkMixin) ScanWifi() func(handler *rest.RestHandler) (*models.ScanWifi, error) {
+	return func(handler *rest.RestHandler) (*models.ScanWifi, error) {
 		payload := map[string]interface{}{
 			"cmd":    "ScanWifi",
 			"action": 1,
 			"param": map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "ScanWifi", true)
+		result, err := handler.Request("POST", payload, "ScanWifi")
 
 		if err != nil {
 			return nil, err
@@ -175,15 +175,15 @@ func (nm *NetworkMixin) ScanWifi() func(handler *network.RestHandler) (*models.S
 }
 
 // Get the camera's general network information
-func (nm *NetworkMixin) GetNetworkGeneral() func(handler *network.RestHandler) (*models.NetworkGeneral, error) {
-	return func(handler *network.RestHandler) (*models.NetworkGeneral, error) {
+func (nm *NetworkMixin) GetNetworkGeneral() func(handler *rest.RestHandler) (*models.NetworkGeneral, error) {
+	return func(handler *rest.RestHandler) (*models.NetworkGeneral, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetLocalLink",
 			"action": 0,
 			"param": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, "GetLocalLink", true)
+		resp, err := handler.Request("POST", payload, "GetLocalLink")
 
 		if err != nil {
 			return nil, err
@@ -202,15 +202,15 @@ func (nm *NetworkMixin) GetNetworkGeneral() func(handler *network.RestHandler) (
 }
 
 // Get the camera's network DDNS information
-func (nm *NetworkMixin) GetNetworkDDNS() func(handler *network.RestHandler) (*models.NetworkDDNS, error) {
-	return func(handler *network.RestHandler) (*models.NetworkDDNS, error) {
+func (nm *NetworkMixin) GetNetworkDDNS() func(handler *rest.RestHandler) (*models.NetworkDDNS, error) {
+	return func(handler *rest.RestHandler) (*models.NetworkDDNS, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetDdns",
 			"action": 0,
 			"param": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, "GetDdns", true)
+		resp, err := handler.Request("POST", payload, "GetDdns")
 
 		if err != nil {
 			return nil, err
@@ -229,15 +229,15 @@ func (nm *NetworkMixin) GetNetworkDDNS() func(handler *network.RestHandler) (*mo
 }
 
 // Get the camera's network NTP information
-func (nm *NetworkMixin) GetNetworkNTP() func(handler *network.RestHandler) (*models.NetworkNTP, error) {
-	return func(handler *network.RestHandler) (*models.NetworkNTP, error) {
+func (nm *NetworkMixin) GetNetworkNTP() func(handler *rest.RestHandler) (*models.NetworkNTP, error) {
+	return func(handler *rest.RestHandler) (*models.NetworkNTP, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetNtp",
 			"action": 0,
 			"param": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, "GetNtp", true)
+		resp, err := handler.Request("POST", payload, "GetNtp")
 
 		if err != nil {
 			return nil, err
@@ -256,15 +256,15 @@ func (nm *NetworkMixin) GetNetworkNTP() func(handler *network.RestHandler) (*mod
 }
 
 // Get the camera's network Email information
-func (nm *NetworkMixin) GetNetworkEmail() func(handler *network.RestHandler) (*models.NetworkEmail, error) {
-	return func(handler *network.RestHandler) (*models.NetworkEmail, error) {
+func (nm *NetworkMixin) GetNetworkEmail() func(handler *rest.RestHandler) (*models.NetworkEmail, error) {
+	return func(handler *rest.RestHandler) (*models.NetworkEmail, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetEmail",
 			"action": 0,
 			"param": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, "GetEmail", true)
+		resp, err := handler.Request("POST", payload, "GetEmail")
 
 		if err != nil {
 			return nil, err
@@ -283,15 +283,15 @@ func (nm *NetworkMixin) GetNetworkEmail() func(handler *network.RestHandler) (*m
 }
 
 // Get the camera's network FTP information
-func (nm *NetworkMixin) GetNetworkFTP() func(handler *network.RestHandler) (*models.NetworkFTP, error) {
-	return func(handler *network.RestHandler) (*models.NetworkFTP, error) {
+func (nm *NetworkMixin) GetNetworkFTP() func(handler *rest.RestHandler) (*models.NetworkFTP, error) {
+	return func(handler *rest.RestHandler) (*models.NetworkFTP, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetFtp",
 			"action": 0,
 			"param": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, "GetFtp", true)
+		resp, err := handler.Request("POST", payload, "GetFtp")
 
 		if err != nil {
 			return nil, err
@@ -310,15 +310,15 @@ func (nm *NetworkMixin) GetNetworkFTP() func(handler *network.RestHandler) (*mod
 }
 
 // Get the camera's network Push information
-func (nm *NetworkMixin) GetNetworkPush() func(handler *network.RestHandler) (*models.NetworkPush, error) {
-	return func(handler *network.RestHandler) (*models.NetworkPush, error) {
+func (nm *NetworkMixin) GetNetworkPush() func(handler *rest.RestHandler) (*models.NetworkPush, error) {
+	return func(handler *rest.RestHandler) (*models.NetworkPush, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetPush",
 			"action": 0,
 			"param": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, "GetPush", true)
+		resp, err := handler.Request("POST", payload, "GetPush")
 
 		if err != nil {
 			return nil, err
@@ -338,8 +338,8 @@ func (nm *NetworkMixin) GetNetworkPush() func(handler *network.RestHandler) (*mo
 
 // Get the camera's network Status information is just a wrapper for networkGeneral
 // TODO: revise this, exactly copied from the reolink-python-api project.
-func (nm *NetworkMixin) GetNetworkStatus() func(handler *network.RestHandler) (*models.NetworkGeneral, error) {
-	return func(handler *network.RestHandler) (*models.NetworkGeneral, error) {
+func (nm *NetworkMixin) GetNetworkStatus() func(handler *rest.RestHandler) (*models.NetworkGeneral, error) {
+	return func(handler *rest.RestHandler) (*models.NetworkGeneral, error) {
 		return nm.GetNetworkGeneral()(handler)
 	}
 }

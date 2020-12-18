@@ -7,7 +7,7 @@ WebRtcClient is greatly inspired by github.com/deepch/RTSPtoWebRTC
 WebRtcClient only wraps and simplifies their code to fit
 inside this library.
 */
-package network
+package rtsp
 
 import (
 	"encoding/base64"

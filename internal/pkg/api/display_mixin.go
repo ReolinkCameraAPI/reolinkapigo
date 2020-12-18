@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/enum"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
 )
 
 type DisplayMixin struct {
@@ -32,8 +32,8 @@ type osd struct {
 type OptionOsd func(*osd)
 
 // Get the camera's Osd information
-func (dm *DisplayMixin) GetOSD() func(handler *network.RestHandler) (*models.Osd, error) {
-	return func(handler *network.RestHandler) (*models.Osd, error) {
+func (dm *DisplayMixin) GetOSD() func(handler *rest.RestHandler) (*models.Osd, error) {
+	return func(handler *rest.RestHandler) (*models.Osd, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetOsd",
 			"action": 1,
@@ -42,7 +42,7 @@ func (dm *DisplayMixin) GetOSD() func(handler *network.RestHandler) (*models.Osd
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "GetOsd", true)
+		result, err := handler.Request("POST", payload, "GetOsd")
 
 		if err != nil {
 			return nil, err
@@ -61,8 +61,8 @@ func (dm *DisplayMixin) GetOSD() func(handler *network.RestHandler) (*models.Osd
 }
 
 // Get the camera's mask information
-func (dm *DisplayMixin) GetMask() func(handler *network.RestHandler) (*models.MaskData, error) {
-	return func(handler *network.RestHandler) (*models.MaskData, error) {
+func (dm *DisplayMixin) GetMask() func(handler *rest.RestHandler) (*models.MaskData, error) {
+	return func(handler *rest.RestHandler) (*models.MaskData, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetMask",
 			"action": 1,
@@ -71,7 +71,7 @@ func (dm *DisplayMixin) GetMask() func(handler *network.RestHandler) (*models.Ma
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "GetMask", true)
+		result, err := handler.Request("POST", payload, "GetMask")
 
 		if err != nil {
 			return nil, err
@@ -90,7 +90,7 @@ func (dm *DisplayMixin) GetMask() func(handler *network.RestHandler) (*models.Ma
 }
 
 // Set the camera's Osd
-func (dm *DisplayMixin) SetOSD(osdOption ...OptionOsd) func(handler *network.RestHandler) (bool,
+func (dm *DisplayMixin) SetOSD(osdOption ...OptionOsd) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	osd := &osd{
@@ -111,7 +111,7 @@ func (dm *DisplayMixin) SetOSD(osdOption ...OptionOsd) func(handler *network.Res
 		op(osd)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := map[string]interface{}{
 			"cmd":    "SetOsd",
 			"action": 1,
@@ -132,7 +132,7 @@ func (dm *DisplayMixin) SetOSD(osdOption ...OptionOsd) func(handler *network.Res
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "SetOsd", true)
+		result, err := handler.Request("POST", payload, "SetOsd")
 
 		if err != nil {
 			return false, err

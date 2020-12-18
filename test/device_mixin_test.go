@@ -3,7 +3,7 @@ package test
 import (
 	"encoding/json"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapigo/pkg"
+	"github.com/ReolinkCameraAPI/reolinkapigo/pkg/reolinkapi"
 	"github.com/jarcoal/httpmock"
 	"io/ioutil"
 	"log"
@@ -107,19 +107,25 @@ func TestDeviceMixin_GetHddInfo(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	_, err = camera.Login()(camera.RestHandler)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockHddInfo()
 
-	hddInfo, err := camera.API.GetHddInfo()(camera.RestHandler)
+	hddInfo, err := camera.GetHddInfo()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -135,19 +141,19 @@ func TestFormatMixin_FormatHdd(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockFormatHdd()
 
-	formatInfo, err := camera.API.FormatHdd(0)(camera.RestHandler)
+	formatInfo, err := camera.FormatHdd(0)(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)

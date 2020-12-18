@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
 )
 
 type PtzMixin struct {}
@@ -66,7 +66,7 @@ func ptzOperation(ptzOperation *ptzOperationOptions) interface{} {
 // Defaults:
 // index: 1
 // speed: 60
-func (pm *PtzMixin) GoToPreset(ptzOptions ...OptionPtzOperation) func(handler *network.RestHandler) (
+func (pm *PtzMixin) GoToPreset(ptzOptions ...OptionPtzOperation) func(handler *rest.RestHandler) (
 	bool, error) {
 	speed := 60
 	index := 1
@@ -81,9 +81,9 @@ func (pm *PtzMixin) GoToPreset(ptzOptions ...OptionPtzOperation) func(handler *n
 		op(ptzPreset)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := ptzOperation(ptzPreset)
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -110,7 +110,7 @@ func (pm *PtzMixin) GoToPreset(ptzOptions ...OptionPtzOperation) func(handler *n
 // Defaults:
 // index: 1
 // name: pos1
-func (pm *PtzMixin) AddPreset(ptzOptions ...OptionPtzPreset) func(handler *network.RestHandler) (bool, error) {
+func (pm *PtzMixin) AddPreset(ptzOptions ...OptionPtzPreset) func(handler *rest.RestHandler) (bool, error) {
 	presetOptions := &ptzPresetOptions{
 		Index: 1,
 		Name:  "pos1",
@@ -120,10 +120,10 @@ func (pm *PtzMixin) AddPreset(ptzOptions ...OptionPtzPreset) func(handler *netwo
 		op(presetOptions)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := ptzPreset(true, presetOptions.Index, presetOptions.Name)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -150,7 +150,7 @@ func (pm *PtzMixin) AddPreset(ptzOptions ...OptionPtzPreset) func(handler *netwo
 // Defaults:
 // index: 1
 // name: pos1
-func (pm *PtzMixin) RemovePreset(ptzOptions ...OptionPtzPreset) func(handler *network.RestHandler) (bool, error) {
+func (pm *PtzMixin) RemovePreset(ptzOptions ...OptionPtzPreset) func(handler *rest.RestHandler) (bool, error) {
 
 	presetOptions := &ptzPresetOptions{
 		Index: 1,
@@ -161,10 +161,10 @@ func (pm *PtzMixin) RemovePreset(ptzOptions ...OptionPtzPreset) func(handler *ne
 		op(presetOptions)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := ptzPreset(false, presetOptions.Index, presetOptions.Name)
 
-		result, err := handler.Request("POST", payload, "PtzPreset", true)
+		result, err := handler.Request("POST", payload, "PtzPreset")
 
 		if err != nil {
 			return false, err
@@ -190,7 +190,7 @@ func (pm *PtzMixin) RemovePreset(ptzOptions ...OptionPtzPreset) func(handler *ne
 // The operation speed is optional and will fallback to defaults. Other operations will be ignored.
 // Defaults:
 // speed: 25
-func (pm *PtzMixin) MoveRight(ptzOptions ...OptionPtzOperation) func(handler *network.RestHandler) (bool,
+func (pm *PtzMixin) MoveRight(ptzOptions ...OptionPtzOperation) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	speed := 25
@@ -205,12 +205,12 @@ func (pm *PtzMixin) MoveRight(ptzOptions ...OptionPtzOperation) func(handler *ne
 		op(ptzOperations)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		// set the index to nil in case the user passes an option for it
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -236,7 +236,7 @@ func (pm *PtzMixin) MoveRight(ptzOptions ...OptionPtzOperation) func(handler *ne
 // The operation speed is optional and will fallback to defaults. Other operations will be ignored.
 // Defaults:
 // speed: 25
-func (pm *PtzMixin) MoveRightUp(ptzOptions ...OptionPtzOperation) func(handler *network.RestHandler) (bool,
+func (pm *PtzMixin) MoveRightUp(ptzOptions ...OptionPtzOperation) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	speed := 25
@@ -251,12 +251,12 @@ func (pm *PtzMixin) MoveRightUp(ptzOptions ...OptionPtzOperation) func(handler *
 		op(ptzOperations)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		// set the index to nil in case the user passes an option for it
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -282,7 +282,7 @@ func (pm *PtzMixin) MoveRightUp(ptzOptions ...OptionPtzOperation) func(handler *
 // The operation speed is optional and will fallback to defaults. Other operations will be ignored.
 // Defaults:
 // speed: 25
-func (pm *PtzMixin) MoveRightDown(ptzOptions ...OptionPtzOperation) func(handler *network.RestHandler) (bool,
+func (pm *PtzMixin) MoveRightDown(ptzOptions ...OptionPtzOperation) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	speed := 25
@@ -297,12 +297,12 @@ func (pm *PtzMixin) MoveRightDown(ptzOptions ...OptionPtzOperation) func(handler
 		op(ptzOperations)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		// set the index to nil in case the user passes an option for it
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -328,7 +328,7 @@ func (pm *PtzMixin) MoveRightDown(ptzOptions ...OptionPtzOperation) func(handler
 // The operation speed is optional and will fallback to defaults. Other operations will be ignored.
 // Defaults:
 // speed: 25
-func (pm *PtzMixin) MoveLeft(ptzOptions ...OptionPtzOperation) func(handler *network.RestHandler) (bool,
+func (pm *PtzMixin) MoveLeft(ptzOptions ...OptionPtzOperation) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	speed := 25
@@ -343,12 +343,12 @@ func (pm *PtzMixin) MoveLeft(ptzOptions ...OptionPtzOperation) func(handler *net
 		op(ptzOperations)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		// set the index to nil in case the user passes an option for it
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -374,7 +374,7 @@ func (pm *PtzMixin) MoveLeft(ptzOptions ...OptionPtzOperation) func(handler *net
 // The operation speed is optional and will fallback to defaults. Other operations will be ignored.
 // Defaults:
 // speed: 25
-func (pm *PtzMixin) MoveLeftUp(ptzOptions ...OptionPtzOperation) func(handler *network.RestHandler) (bool,
+func (pm *PtzMixin) MoveLeftUp(ptzOptions ...OptionPtzOperation) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	speed := 25
@@ -389,12 +389,12 @@ func (pm *PtzMixin) MoveLeftUp(ptzOptions ...OptionPtzOperation) func(handler *n
 		op(ptzOperations)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		// set the index to nil in case the user passes an option for it
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -420,7 +420,7 @@ func (pm *PtzMixin) MoveLeftUp(ptzOptions ...OptionPtzOperation) func(handler *n
 // The operation speed is optional and will fallback to defaults. Other operations will be ignored.
 // Defaults:
 // speed: 25
-func (pm *PtzMixin) MoveLeftDown(ptzOptions ...OptionPtzOperation) func(handler *network.RestHandler) (bool,
+func (pm *PtzMixin) MoveLeftDown(ptzOptions ...OptionPtzOperation) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	speed := 25
@@ -435,12 +435,12 @@ func (pm *PtzMixin) MoveLeftDown(ptzOptions ...OptionPtzOperation) func(handler 
 		op(ptzOperations)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		// set the index to nil in case the user passes an option for it
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -466,7 +466,7 @@ func (pm *PtzMixin) MoveLeftDown(ptzOptions ...OptionPtzOperation) func(handler 
 // The operation speed is optional and will fallback to defaults. Other operations will be ignored.
 // Defaults:
 // speed: 25
-func (pm *PtzMixin) MoveUp(ptzOptions ...OptionPtzOperation) func(handler *network.RestHandler) (bool,
+func (pm *PtzMixin) MoveUp(ptzOptions ...OptionPtzOperation) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	speed := 25
@@ -481,12 +481,12 @@ func (pm *PtzMixin) MoveUp(ptzOptions ...OptionPtzOperation) func(handler *netwo
 		op(ptzOperations)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		// set the index to nil in case the user passes an option for it
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -512,7 +512,7 @@ func (pm *PtzMixin) MoveUp(ptzOptions ...OptionPtzOperation) func(handler *netwo
 // The operation speed is optional and will fallback to defaults. Other operations will be ignored.
 // Defaults:
 // speed: 25
-func (pm *PtzMixin) MoveDown(ptzOptions ...OptionPtzOperation) func(handler *network.RestHandler) (bool,
+func (pm *PtzMixin) MoveDown(ptzOptions ...OptionPtzOperation) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	speed := 25
@@ -527,12 +527,12 @@ func (pm *PtzMixin) MoveDown(ptzOptions ...OptionPtzOperation) func(handler *net
 		op(ptzOperations)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		// set the index to nil in case the user passes an option for it
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -555,9 +555,9 @@ func (pm *PtzMixin) MoveDown(ptzOptions ...OptionPtzOperation) func(handler *net
 }
 
 // Stops the cameras current action
-func (pm *PtzMixin) StopPtz() func(handler *network.RestHandler) (bool,
+func (pm *PtzMixin) StopPtz() func(handler *rest.RestHandler) (bool,
 	error) {
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		ptzOperations := &ptzOperationOptions{
 			Operation: "Stop",
 			Speed:     nil,
@@ -566,7 +566,7 @@ func (pm *PtzMixin) StopPtz() func(handler *network.RestHandler) (bool,
 
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -589,8 +589,8 @@ func (pm *PtzMixin) StopPtz() func(handler *network.RestHandler) (bool,
 }
 
 // Move the camera in a clockwise rotation
-func (pm *PtzMixin) AutoMovement() func(handler *network.RestHandler) (bool, error) {
-	return func(handler *network.RestHandler) (bool, error) {
+func (pm *PtzMixin) AutoMovement() func(handler *rest.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		ptzOperations := &ptzOperationOptions{
 			Operation: "Auto",
 			Speed:     nil,
@@ -599,7 +599,7 @@ func (pm *PtzMixin) AutoMovement() func(handler *network.RestHandler) (bool, err
 
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err

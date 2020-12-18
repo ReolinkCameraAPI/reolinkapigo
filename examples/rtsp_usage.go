@@ -3,7 +3,7 @@ package examples
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rtsp"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -13,7 +13,7 @@ import (
 )
 
 type Stream struct {
-	RtspClients []*network.RtspClient
+	RtspClients []*rtsp.RtspClient
 }
 
 // RTSP stream to WebRTC
@@ -24,12 +24,13 @@ func RtspUsage() {
 		"rtsp://localhost:8554/mystream",
 	}
 
-	rtspClients := []*network.RtspClient{}
+	rtspClients := []*rtsp.RtspClient{}
 
 	// Create all the RTSP clients
 	for _, u := range rtspStreamUrls {
-		rtspClient := network.NewRtspClient(u, network.RtspClientOptionDebug(true),
-			network.RtspClientOptionRetryCount(1), network.RtspClientOptionTimeout(1*time.Second))
+		rtspClient := rtsp.NewRtspClient(u,
+			rtsp.WithRetry(5),
+			rtsp.WithTimeout(10))
 
 		fmt.Printf("Opening stream %s...\n", u)
 
@@ -56,7 +57,7 @@ func (s *Stream) handlerStream(c *gin.Context) {
 	sdpData := c.PostForm("data")
 	streamUUID := c.PostForm("streamUUID")
 
-	var currentRtsp *network.RtspClient
+	var currentRtsp *rtsp.RtspClient
 
 	for _, rc := range s.RtspClients {
 		if rc.UUID == streamUUID {
@@ -66,7 +67,7 @@ func (s *Stream) handlerStream(c *gin.Context) {
 	}
 
 	if currentRtsp != nil {
-		webRtcStream := network.NewWebRtcClient(currentRtsp)
+		webRtcStream := rtsp.NewWebRtcClient(currentRtsp)
 
 		// TODO:
 		go webRtcStream.OpenWebRtcStream(sdpData)

@@ -1,10 +1,10 @@
 <h1 align="center">Reolink Go Api Client</h1>
 
 <p align="center">
-    	<img alt="Reolink Approval" src="https://img.shields.io/badge/reolink-approved-blue?style=flat-square">
-	<img alt="GitHub" src="https://img.shields.io/github/license/ReolinkCameraAPI/reolink-go-api?style=flat-square">
-	<img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/ReolinkCameraAPI/reolink-go-api?style=flat-square">
-	<img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/v/tag/ReolinkCameraApi/reolink-go-api?style=flat-square">
+    <img alt="Reolink Approval" src="https://img.shields.io/badge/reolink-approved-blue?style=flat-square">
+	<img alt="GitHub" src="https://img.shields.io/github/license/ReolinkCameraAPI/reolinkapigo?style=flat-square">
+	<img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/ReolinkCameraAPI/reolinkapigo?style=flat-square">
+	<img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/v/tag/ReolinkCameraAPI/reolinkapigo?style=flat-square">
    	<img alt="Discord" src="https://img.shields.io/discord/773257004911034389?style=flat-square">
 </p>
 
@@ -40,13 +40,28 @@ but just in pure Go.
 
 ---
 
-## Get started
+## Installation
 
-### Installation
+If `go get` is not working for you, please check out this amazing post about
+`GO111MODULE=on` [here](https://dev.to/maelvls/why-is-go111module-everywhere-and-everything-about-go-modules-24k).
 
-    go get -u github.com/ReolinkCameraApi/reolink-go-api
 
-### Usage
+### Using go get
+
+    GO111MODULE=on go get github.com/ReolinkCameraAPI/reolinkapigo@latest
+
+A Specific version using `@v0.x.x`
+
+    GO111MODULE=on go get -u github.com/ReolinkCameraAPI/reolinkapigo@v0.0.1
+
+### From source
+
+    cd $GOPATH
+    mkdir -p src/github.com/ReolinkCameraAPI
+    cd src/github.com/ReolinkCameraAPI
+    git clone https://github.com/ReolinkCameraAPI/reolinkapigo.git
+
+## Usage
 
 Check the `examples/` directory for example code and implementations.
 
@@ -54,14 +69,14 @@ Implement a "Camera" object by passing it an IP address, Username and Password. 
 retrieve a login token from the Reolink Camera. This token is necessary to interact with the Camera using other
 commands.
 
-    import "github.com/ReolinkCameraApi/reolinkapigo"
+    import "github.com/ReolinkCameraAPI/reolinkapigo"
 
     // This can throw an error due to the API trying to authorise with the camera
     // to retrieve the necessary token for future requests.
 	camera, err := pkg.NewCamera("foo", "bar", "192.168.1.100")
 
     // now call any of the supported api's by passing it it's resthandler
-    ok, err := camera.API.FormatHdd(0)(camera.RestHandler)
+    ok, err := camera.FormatHdd(0)(camera.RestHandler)
 
 Dependencies needed to make this work:
 
