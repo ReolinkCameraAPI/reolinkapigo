@@ -1,16 +1,13 @@
 package api
 
 import (
-	"fmt"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/enum"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
 	"github.com/deepch/vdk/av"
-	"github.com/deepch/vdk/format/rtsp"
-	"log"
-	"time"
 )
 
-type RtspMixin struct {}
+type RtspMixin struct {
+	Username string
+	Password string
+}
 
 type RtspStream struct {
 	Frame []av.CodecData
@@ -78,58 +75,58 @@ type RtspStream struct {
 	}
 }*/
 
-func (rm *RtspMixin) rtspStream(port *int, profile enum.RtspProfile,
-	protocol *network.Protocol) func(handler *network.RestHandler) {
-	return func(handler *network.RestHandler) {
-
-		// creating unbuffered channel due to wanting frames in order
-		// this will block the next frame from being accessible
-		stream := make(chan *RtspStream)
-
-		rtspUrl := fmt.Sprintf("%s:%s@%s", handler.Username, handler.Password, handler.Host)
-
-		if port != nil {
-			rtspUrl = fmt.Sprintf("%s:%d", rtspUrl, port)
-		} else {
-			rtspUrl = fmt.Sprintf("%s:%d", rtspUrl, 554)
-		}
-
-		rtspUrl = fmt.Sprintf("rtsp://%s//h264Preview_01_%s", rtspUrl, profile.Value())
-
-		go func() {
-
-			for {
-				rtsp.DebugRtp = true
-				session, err := rtsp.Dial(rtspUrl)
-
-				if err != nil {
-					log.Println(err)
-					time.Sleep(5 * time.Second)
-					continue
-				}
-
-				session.RtpKeepAliveTimeout = 10 * time.Second
-				if err != nil {
-					log.Println(err)
-					time.Sleep(5 * time.Second)
-					continue
-				}
-
-				codec, err := session.Streams()
-				if err != nil {
-					log.Println(err)
-					time.Sleep(5 * time.Second)
-					continue
-				}
-
-				stream <- &RtspStream{
-					Frame: codec,
-					Err:   nil,
-				}
-
-			}
-
-		}()
-
-	}
-}
+//func (rm *RtspMixin) rtspStream(port *int, profile enum.RtspProfile,
+//	protocol *network.Protocol) func(handler *network.RestHandler) {
+//	return func(handler *network.RestHandler) {
+//
+//		// creating unbuffered channel due to wanting frames in order
+//		// this will block the next frame from being accessible
+//		stream := make(chan *RtspStream)
+//
+//		rtspUrl := fmt.Sprintf("%s:%s@%s", rm.Username, rm.Password, handler.Host)
+//
+//		if port != nil {
+//			rtspUrl = fmt.Sprintf("%s:%d", rtspUrl, port)
+//		} else {
+//			rtspUrl = fmt.Sprintf("%s:%d", rtspUrl, 554)
+//		}
+//
+//		rtspUrl = fmt.Sprintf("rtsp://%s//h264Preview_01_%s", rtspUrl, profile.Value())
+//
+//		go func() {
+//
+//			for {
+//				rtsp.DebugRtp = true
+//				session, err := rtsp.Dial(rtspUrl)
+//
+//				if err != nil {
+//					log.Println(err)
+//					time.Sleep(5 * time.Second)
+//					continue
+//				}
+//
+//				session.RtpKeepAliveTimeout = 10 * time.Second
+//				if err != nil {
+//					log.Println(err)
+//					time.Sleep(5 * time.Second)
+//					continue
+//				}
+//
+//				codec, err := session.Streams()
+//				if err != nil {
+//					log.Println(err)
+//					time.Sleep(5 * time.Second)
+//					continue
+//				}
+//
+//				stream <- &RtspStream{
+//					Frame: codec,
+//					Err:   nil,
+//				}
+//
+//			}
+//
+//		}()
+//
+//	}
+//}

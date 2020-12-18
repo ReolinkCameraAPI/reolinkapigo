@@ -1,14 +1,14 @@
 package network
 
-type Proxy uint
+type Scheme uint
 
 const (
-	HTTP Proxy = iota
+	HTTP Scheme = iota
 	HTTPS
 	SOCKS5
 )
 
-func (p Proxy) String() string {
+func (p Scheme) String() string {
 	return []string{"http", "https", "socks5"}[p]
 }
 

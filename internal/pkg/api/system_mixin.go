@@ -24,13 +24,13 @@ func (sm *SystemMixin) GetGeneralSystem() func(handler *network.RestHandler) (*m
 			"param":  map[string]interface{}{},
 		}
 
-		resultTime, err := handler.Request("POST", payloadTime, "GetTime", true)
+		resultTime, err := handler.Request("POST", payloadTime, "GetTime")
 
 		if err != nil {
 			return nil, err
 		}
 
-		resultNorm, err := handler.Request("POST", payloadNorm, "GetNorm", true)
+		resultNorm, err := handler.Request("POST", payloadNorm, "GetNorm")
 
 		if err != nil {
 			return nil, err
@@ -78,7 +78,7 @@ func (sm *SystemMixin) GetPerformance() func(handler *network.RestHandler) (*mod
 			"param":  map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetPerformance", true)
+		result, err := handler.Request("POST", payload, "GetPerformance")
 
 		if err != nil {
 			return nil, err
@@ -106,7 +106,7 @@ func (sm *SystemMixin) GetDeviceInformation() func(handler *network.RestHandler)
 			"param":  map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetDevInfo", true)
+		result, err := handler.Request("POST", payload, "GetDevInfo")
 
 		if err != nil {
 			return nil, err
@@ -133,7 +133,7 @@ func (sm *SystemMixin) RebootCamera() func(handler *network.RestHandler) (bool, 
 			"param":  map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "Reboot", true)
+		result, err := handler.Request("POST", payload, "Reboot")
 
 		if err != nil {
 			return false, err
@@ -166,7 +166,7 @@ func (sm *SystemMixin) GetDstInformation() func(handler *network.RestHandler) (*
 			"param":  map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetTime", true)
+		result, err := handler.Request("POST", payload, "GetTime")
 
 		if err != nil {
 			return nil, nil, err

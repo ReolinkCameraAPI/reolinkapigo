@@ -7,6 +7,7 @@ import (
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
 )
 
+
 type DeviceMixin struct {
 }
 
@@ -20,7 +21,7 @@ func (dm *DeviceMixin) GetHddInfo() func(handler *network.RestHandler) (*models.
 			"params": map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetHddInfo", true)
+		result, err := handler.Request("POST", payload, "GetHddInfo")
 
 		if err != nil {
 			return nil, err
@@ -56,7 +57,7 @@ func (dm *DeviceMixin) FormatHdd(hddId int) func(handler *network.RestHandler) (
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "Format", true)
+		result, err := handler.Request("POST", payload, "Format")
 
 		if err != nil {
 			return false, err

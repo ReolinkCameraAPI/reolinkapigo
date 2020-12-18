@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/api"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/enum"
-	"github.com/ReolinkCameraAPI/reolinkapigo/pkg"
+	"github.com/ReolinkCameraAPI/reolinkapigo/pkg/reolinkapi"
 	"github.com/jarcoal/httpmock"
 	"io/ioutil"
 	"log"
@@ -116,19 +116,19 @@ func TestImageMixin_SetAdvanceImageSettings(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockSetAdvancedImage()
 
-	ok, err := camera.API.SetAdvanceImageSettings(
+	ok, err := camera.SetAdvanceImageSettings(
 		api.ImageAdvancedOptionDayNight(enum.DAY_NIGHT_AUTO),
 		api.ImageAdvancedOptionBacklight(enum.DYNAMIC_RANGE_CONTROL),
 		api.ImageAdvancedOptionBlc(1),
@@ -148,19 +148,19 @@ func TestImageMixin_SetImageSettings(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockSetImageSettings()
 
-	ok, err := camera.API.SetImageSettings()(camera.RestHandler)
+	ok, err := camera.SetImageSettings()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)

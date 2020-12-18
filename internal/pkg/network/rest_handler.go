@@ -18,107 +18,159 @@ var (
 	}
 )
 
-type RestHandlerProxy struct {
-	Type     Proxy
-	Protocol *Protocol
-	Host     string
-	Port     int
-	Auth     *RestHandlerProxyAuth
+type optionsProxy struct {
+	scheme   Scheme
+	protocol Protocol
+	host     string
+	port     int
+	username string
+	password string
 }
 
-type RestHandlerProxyAuth struct {
-	Username string
-	Password string
+type options struct {
+	host     string
+	port     int
+	endpoint string
+	scheme   Scheme
+	token    string
+	proxy    *optionsProxy
+}
+
+type OptionRestHandler interface {
+	apply(*options)
+}
+
+type portOption int
+type endpointOption string
+type schemeOption struct {
+	Scheme
+}
+
+type proxyScheme struct {
+	Scheme
+}
+type proxyProtocol struct {
+	Protocol
+}
+type proxyHost string
+type proxyPort int
+type proxyUsername string
+type proxyPassword string
+
+func (p portOption) apply(opts *options) {
+	opts.port = int(p)
+}
+
+func (e endpointOption) apply(opts *options) {
+	opts.endpoint = string(e)
+}
+
+func (s schemeOption) apply(opts *options) {
+	opts.scheme = s.Scheme
+}
+
+func (p proxyScheme) apply(opts *options) {
+	opts.proxy.scheme = p.Scheme
+}
+
+func (p proxyProtocol) apply(opts *options) {
+	opts.proxy.protocol = p.Protocol
+}
+
+func (p proxyHost) apply(opts *options) {
+	opts.proxy.host = string(p)
+}
+
+func (p proxyPort) apply(opts *options) {
+	opts.proxy.port = int(p)
+}
+
+func (p proxyUsername) apply(opts *options) {
+	opts.proxy.username = string(p)
+}
+
+func (p proxyPassword) apply(opts *options) {
+	opts.proxy.password = string(p)
+}
+
+// Change the default port to a custom port.
+// Default is unset due to http being the default protocol
+func WithPort(port int) OptionRestHandler {
+	return portOption(port)
+}
+
+// Change the default endpoint to a custom endpoint
+// Default is "/cgi-bin/api.cgi"
+// If for some reason the camera you are using is different, one can update it here.
+func WithEndpoint(endpoint string) OptionRestHandler {
+	return endpointOption(endpoint)
+}
+
+// Change the default scheme from HTTP to HTTPS or SOCKS5
+func WithScheme(scheme Scheme) OptionRestHandler {
+	return schemeOption{scheme}
+}
+
+func WithProxyProtocol(protocol Protocol) OptionRestHandler {
+	return proxyProtocol{protocol}
+}
+
+// Add a username to the proxy configuration
+func WithProxyUsername(username string) OptionRestHandler {
+	return proxyUsername(username)
+}
+
+// Add a password to the proxy configuration
+func WithProxyPassword(password string) OptionRestHandler {
+	return proxyPassword(password)
+}
+
+// Change the default scheme from HTTP to HTTPS or SOCKS5
+func WithProxyScheme(scheme Scheme) OptionRestHandler {
+	return proxyScheme{scheme}
+}
+
+// Add a proxy host configuration
+func WithProxyHost(host string) OptionRestHandler {
+	return proxyHost(host)
+}
+
+// Add a proxy port configuration
+func WithProxyPort(port int) OptionRestHandler {
+	return proxyPort(port)
 }
 
 type RestHandler struct {
-	Host     string
-	Port     int
-	Endpoint string
-	Proxy    *RestHandlerProxy
-	HTTPS    bool
-	*RestAuth
+	*options
 }
-
-type RestAuth struct {
-	Username string
-	Password string
-	Token    string
-}
-
-type OptionRestHandler func(*RestHandler)
 
 // Create a new RestHandler object with optional argument using Variadic options pattern for customisation
 // Refer to the RestHandlerOption<option_name> functions
 // RestHandler is used to wrap the http package and give a cleaner more defined scope which the person
 // implementing the library will have full control over.
 // https://stackoverflow.com/a/26326418
-func NewRestHandler(host string, options ...OptionRestHandler) *RestHandler {
-	restHandler := &RestHandler{
-		Host:     host,               // the IP only, default scheme is http
-		Port:     0,                  // no port necessary on default config
-		Endpoint: "cgi-bin/api.cgi", // Default endpoint for the Reolink Camera's
-		Proxy: nil,
-		HTTPS: false,
-		RestAuth: &RestAuth{
-			Username: "",
-			Password: "",
-			Token:    "",
+func NewRestHandler(host string, opts ...OptionRestHandler) *RestHandler {
+	options := &options{
+		host:     host,
+		port:     0,
+		endpoint: "cgi-bin/api.cgi",
+		scheme:   HTTP,
+		token:    "",
+		proxy: &optionsProxy{
+			scheme:   HTTP,
+			protocol: PROTOCOL_TCP,
+			host:     "",
+			port:     0,
+			username: "",
+			password: "",
 		},
 	}
 
-	for _, op := range options {
-		op(restHandler)
+	for _, op := range opts {
+		op.apply(options)
 	}
 
-	return restHandler
-}
-
-// Change the default port to a custom port.
-// Default is unset due to http being the default protocol
-func RestHandlerOptionPort(port int) OptionRestHandler {
-	return func(rh *RestHandler) {
-		rh.Port = port
-	}
-}
-
-// Change the default endpoint to a custom endpoint
-// Default is "/cgi-bin/api.cgi"
-// If for some reason the camera you are using is different, one can update it here.
-func RestHandlerOptionEndpoint(endpoint string) OptionRestHandler {
-	return func(rh *RestHandler) {
-		rh.Endpoint = endpoint
-	}
-}
-
-// Add a proxy layer on top of the current connection
-func RestHandlerOptionProxy(proxy Proxy, host string, port int, auth *RestHandlerProxyAuth,
-	protocol *Protocol) OptionRestHandler {
-	return func(rh *RestHandler) {
-		rh.Proxy = &RestHandlerProxy{
-			Host:     host,
-			Port:     port,
-			Type:     proxy,
-			Auth:     auth,
-			Protocol: protocol,
-		}
-	}
-}
-
-// Change the default scheme from HTTP to HTTPS
-func RestHandlerOptionHttp(https bool) OptionRestHandler {
-	return func(rh *RestHandler) {
-		rh.HTTPS = https
-	}
-}
-
-func (rh *RestHandler) SetUsernamePassword(username string, password string) {
-	rh.Username = username
-	rh.Password = password
-}
-
-func (rh *RestHandler) SetToken(token string) {
-	rh.Token = token
+	return &RestHandler{options}
 }
 
 // Do the http request
@@ -126,34 +178,24 @@ func (rh *RestHandler) SetToken(token string) {
 // method: GET or POST
 // payload: the json data
 // auth: alters the request to include auth token on true
-func (rh *RestHandler) Request(method string, payload interface{}, command string, auth bool) (*GeneralData, error) {
+func (rh *RestHandler) Request(method string, payload interface{}, command string) (*GeneralData, error) {
 
 	var urlConcat string
-	if rh.Port > 0 {
-		urlConcat = fmt.Sprintf("%s:%d/%s", rh.Host, rh.Port, rh.Endpoint)
+	if rh.port > 0 {
+		urlConcat = fmt.Sprintf("%s:%d/%s", rh.host, rh.port, rh.endpoint)
 	} else {
-		urlConcat = fmt.Sprintf("%s/%s", rh.Host, rh.Endpoint)
+		urlConcat = fmt.Sprintf("%s/%s", rh.host, rh.endpoint)
 	}
 
-	if rh.HTTPS {
-		urlConcat = fmt.Sprintf("https://%s", urlConcat)
-	} else {
-		urlConcat = fmt.Sprintf("http://%s", urlConcat)
-	}
+	urlConcat = fmt.Sprintf("%s://%s", rh.scheme.String(), urlConcat)
 
 	var data []byte
 
-	if auth {
-		if rh.Token == "" {
-			return nil, fmt.Errorf("token is empty. login first")
-		}
+	params := url.Values{}
+	params.Add("token", rh.token)
+	params.Add("cmd", command)
 
-		params := url.Values{}
-		params.Add("token", rh.Token)
-		params.Add("cmd", command)
-
-		urlConcat = fmt.Sprintf("%s?%s", urlConcat, params.Encode())
-	}
+	urlConcat = fmt.Sprintf("%s?%s", urlConcat, params.Encode())
 
 	data, err := json.Marshal([]interface{}{payload})
 
@@ -179,27 +221,30 @@ func (rh *RestHandler) Request(method string, payload interface{}, command strin
 
 	// https://stackoverflow.com/questions/51845690/how-to-program-go-to-use-a-proxy-when-using-a-custom-transport
 	// https://gist.github.com/ometa/71d23ed48c03c003f6e4910648612859
-	if rh.Proxy != nil {
+	if rh.proxy.host != "" {
 
 		tr := http.DefaultTransport.(*http.Transport).Clone()
 		tr.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 		var proxyConcat string
 
-		switch rh.Proxy.Type {
+		switch rh.proxy.scheme {
 		case HTTP, HTTPS:
-			if rh.Proxy.Auth != nil {
-				proxyConcat = fmt.Sprintf("%s://%s:%s@%s:%d",
-					rh.Proxy.Type,
-					rh.Proxy.Auth.Username,
-					rh.Proxy.Auth.Password,
-					rh.Proxy.Host,
-					rh.Port)
+			proxyConcat = fmt.Sprintf("%s://", rh.proxy.scheme)
+
+			if rh.proxy.username != "" {
+				proxyConcat = fmt.Sprintf("%s%s:%s@%s:%d",
+					proxyConcat,
+					rh.proxy.username,
+					rh.proxy.password,
+					rh.proxy.host,
+					rh.proxy.port)
+
 			} else {
-				proxyConcat = fmt.Sprintf("%s://%s:%d",
-					rh.Proxy.Type,
-					rh.Proxy.Host,
-					rh.Port)
+				proxyConcat = fmt.Sprintf("%s%s:%d",
+					proxyConcat,
+					rh.proxy.host,
+					rh.proxy.port)
 			}
 
 			proxyUrl, err := url.Parse(proxyConcat)
@@ -214,16 +259,10 @@ func (rh *RestHandler) Request(method string, payload interface{}, command strin
 			break
 		case SOCKS5:
 			proxyConcat = fmt.Sprintf("%s:%d",
-				rh.Proxy.Host,
-				rh.Port)
+				rh.proxy.host,
+				rh.proxy.port)
 
-			var networkType string
-
-			if rh.Proxy.Protocol != nil {
-				networkType = rh.Proxy.Protocol.String()
-			} else {
-				networkType = "tcp"
-			}
+			networkType := rh.proxy.protocol.String()
 
 			dialer, err := proxy.SOCKS5(networkType, proxyConcat, nil, proxy.Direct)
 
@@ -240,16 +279,21 @@ func (rh *RestHandler) Request(method string, payload interface{}, command strin
 			break
 
 		default:
-			if rh.Proxy.Auth != nil {
-				proxyConcat = fmt.Sprintf("http://%s:%s@%s:%d",
-					rh.Proxy.Auth.Username,
-					rh.Proxy.Auth.Password,
-					rh.Proxy.Host,
-					rh.Port)
+			proxyConcat = fmt.Sprintf("%s://", rh.proxy.scheme)
+
+			if rh.proxy.username != "" {
+				proxyConcat = fmt.Sprintf("%s%s:%s@%s:%d",
+					proxyConcat,
+					rh.proxy.username,
+					rh.proxy.password,
+					rh.proxy.host,
+					rh.proxy.port)
+
 			} else {
-				proxyConcat = fmt.Sprintf("http://%s:%d",
-					rh.Proxy.Host,
-					rh.Port)
+				proxyConcat = fmt.Sprintf("%s%s:%d",
+					proxyConcat,
+					rh.proxy.host,
+					rh.proxy.port)
 			}
 		}
 
@@ -277,4 +321,12 @@ func (rh *RestHandler) Request(method string, payload interface{}, command strin
 	}
 
 	return result[0], nil
+}
+
+func (rh *RestHandler) SetToken(token string) {
+	rh.token = token
+}
+
+func (rh *RestHandler) GetToken() string {
+	return rh.token
 }

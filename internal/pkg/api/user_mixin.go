@@ -19,7 +19,7 @@ func (um *UserMixin) GetOnlineUsers() func(handler *network.RestHandler) ([]*mod
 			"param":  map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetOnline", true)
+		result, err := handler.Request("POST", payload, "GetOnline")
 
 		if err != nil {
 			return nil, err
@@ -46,7 +46,7 @@ func (um *UserMixin) GetUsers() func(handler *network.RestHandler) ([]*models.Us
 			"param":  map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetUser", true)
+		result, err := handler.Request("POST", payload, "GetUser")
 
 		if err != nil {
 			return nil, err
@@ -82,7 +82,7 @@ func (um *UserMixin) AddUser(
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "AddUser", true)
+		result, err := handler.Request("POST", payload, "AddUser")
 
 		if err != nil {
 			return false, err
@@ -115,7 +115,7 @@ func (um *UserMixin) UpdateUserPassword(username string, password string) func(h
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "ModifyUser", true)
+		result, err := handler.Request("POST", payload, "ModifyUser")
 
 		if err != nil {
 			return false, err
@@ -150,7 +150,7 @@ func (um *UserMixin) DeleteUser(username string) func(handler *network.RestHandl
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "DelUser", true)
+		result, err := handler.Request("POST", payload, "DelUser")
 
 		if err != nil {
 			return false, err

@@ -9,9 +9,11 @@ import (
 )
 
 type AuthMixin struct {
+	Username string
+	Password string
 }
 
-func (am *AuthMixin) Login() func(handler *network.RestHandler) (bool, error) {
+func (am *AuthMixin) Login() func(*network.RestHandler) (bool, error) {
 	return func(handler *network.RestHandler) (bool, error) {
 
 		payload := map[string]interface{}{
@@ -19,13 +21,13 @@ func (am *AuthMixin) Login() func(handler *network.RestHandler) (bool, error) {
 			"action": 0,
 			"param": map[string]interface{}{
 				"User": map[string]interface{}{
-					"userName": handler.Username,
-					"password": handler.Password,
+					"userName": am.Username,
+					"password": am.Password,
 				},
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "Login", false)
+		result, err := handler.Request("POST", payload, "Login")
 
 		if err != nil {
 			return false, err
@@ -58,7 +60,7 @@ func (am *AuthMixin) Logout() func(handler *network.RestHandler) (bool, error) {
 			"action": 0,
 		}
 
-		result, err := handler.Request("POST", payload, "Logout", false)
+		result, err := handler.Request("POST", payload, "Logout")
 
 		if err != nil {
 			return false, err

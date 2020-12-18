@@ -44,7 +44,11 @@ but just in pure Go.
 
 ### Installation
 
-    go get -u github.com/ReolinkCameraApi/reolink-go-api
+    go get -u github.com/ReolinkCameraAPI/reolinkapigo
+
+    Or
+
+    GO111MODULE=on go get -u github.com/ReolinkCameraAPI/reolinkapigo
 
 ### Usage
 

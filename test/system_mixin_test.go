@@ -3,7 +3,7 @@ package test
 import (
 	"encoding/json"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapigo/pkg"
+	"github.com/ReolinkCameraAPI/reolinkapigo/pkg/reolinkapi"
 	"github.com/jarcoal/httpmock"
 	"io/ioutil"
 	"net/http"
@@ -241,19 +241,19 @@ func TestRecordingMixin_GetGeneralSystem(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockGetGeneralSystem()
 
-	systemInfo, err := camera.API.GetGeneralSystem()(camera.RestHandler)
+	systemInfo, err := camera.GetGeneralSystem()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -270,19 +270,19 @@ func TestRecordingMixin_GetPerformance(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockGetPerformance()
 
-	performanceInfo, err := camera.API.GetPerformance()(camera.RestHandler)
+	performanceInfo, err := camera.GetPerformance()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -299,19 +299,19 @@ func TestRecordingMixin_GetDeviceInformation(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockDeviceInformation()
 
-	deviceInfo, err := camera.API.GetDeviceInformation()(camera.RestHandler)
+	deviceInfo, err := camera.GetDeviceInformation()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -328,19 +328,19 @@ func TestRecordingMixin_RebootCamera(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockRebootCamera()
 
-	ok, err := camera.API.RebootCamera()(camera.RestHandler)
+	ok, err := camera.RebootCamera()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -356,19 +356,19 @@ func TestRecordingMixin_GetDstInformation(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockGetGeneralSystem()
 
-	dstInfo, timeInfo, err := camera.API.GetDstInformation()(camera.RestHandler)
+	dstInfo, timeInfo, err := camera.GetDstInformation()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)

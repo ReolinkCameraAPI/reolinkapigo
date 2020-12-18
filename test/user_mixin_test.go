@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/enum"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapigo/pkg"
+	"github.com/ReolinkCameraAPI/reolinkapigo/pkg/reolinkapi"
 	"github.com/jarcoal/httpmock"
 	"io/ioutil"
 	"log"
@@ -271,19 +271,19 @@ func TestUserMixin_GetOnlineUsers(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockGetOnlineUsers()
 
-	onlineUsers, err := camera.API.GetOnlineUsers()(camera.RestHandler)
+	onlineUsers, err := camera.GetOnlineUsers()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -300,19 +300,19 @@ func TestUserMixin_GetUsers(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockGetUsers()
 
-	users, err := camera.API.GetUsers()(camera.RestHandler)
+	users, err := camera.GetUsers()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -329,19 +329,19 @@ func TestUserMixin_AddUser(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockAddUser()
 
-	ok, err := camera.API.AddUser("user1234", "12345", enum.USER_LEVEL_GUEST)(camera.RestHandler)
+	ok, err := camera.AddUser("user1234", "12345", enum.USER_LEVEL_GUEST)(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -356,19 +356,19 @@ func TestUserMixin_UpdateUserPassword(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockUpdateUserPassword()
 
-	ok, err := camera.API.UpdateUserPassword("user1234", "12345")(camera.RestHandler)
+	ok, err := camera.UpdateUserPassword("user1234", "12345")(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -383,19 +383,19 @@ func TestUserMixin_DeleteUser(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 	
 	registerMockDeleteUser()
 
-	ok, err := camera.API.DeleteUser("user1234")(camera.RestHandler)
+	ok, err := camera.DeleteUser("user1234")(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)

@@ -117,7 +117,7 @@ func (im *ImageMixin) SetAdvanceImageSettings(imageAdvancedOptions ...OptionAdva
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "SetIsp", true)
+		result, err := handler.Request("POST", payload, "SetIsp")
 
 		if err != nil {
 			return false, err
@@ -177,7 +177,7 @@ func (im *ImageMixin) SetImageSettings(imageOptions ...OptionImageSetting) func(
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "SetImage", true)
+		result, err := handler.Request("POST", payload, "SetImage")
 
 		if err != nil {
 			return false, err

@@ -83,7 +83,7 @@ func (pm *PtzMixin) GoToPreset(ptzOptions ...OptionPtzOperation) func(handler *n
 
 	return func(handler *network.RestHandler) (bool, error) {
 		payload := ptzOperation(ptzPreset)
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -123,7 +123,7 @@ func (pm *PtzMixin) AddPreset(ptzOptions ...OptionPtzPreset) func(handler *netwo
 	return func(handler *network.RestHandler) (bool, error) {
 		payload := ptzPreset(true, presetOptions.Index, presetOptions.Name)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -164,7 +164,7 @@ func (pm *PtzMixin) RemovePreset(ptzOptions ...OptionPtzPreset) func(handler *ne
 	return func(handler *network.RestHandler) (bool, error) {
 		payload := ptzPreset(false, presetOptions.Index, presetOptions.Name)
 
-		result, err := handler.Request("POST", payload, "PtzPreset", true)
+		result, err := handler.Request("POST", payload, "PtzPreset")
 
 		if err != nil {
 			return false, err
@@ -210,7 +210,7 @@ func (pm *PtzMixin) MoveRight(ptzOptions ...OptionPtzOperation) func(handler *ne
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -256,7 +256,7 @@ func (pm *PtzMixin) MoveRightUp(ptzOptions ...OptionPtzOperation) func(handler *
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -302,7 +302,7 @@ func (pm *PtzMixin) MoveRightDown(ptzOptions ...OptionPtzOperation) func(handler
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -348,7 +348,7 @@ func (pm *PtzMixin) MoveLeft(ptzOptions ...OptionPtzOperation) func(handler *net
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -394,7 +394,7 @@ func (pm *PtzMixin) MoveLeftUp(ptzOptions ...OptionPtzOperation) func(handler *n
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -440,7 +440,7 @@ func (pm *PtzMixin) MoveLeftDown(ptzOptions ...OptionPtzOperation) func(handler 
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -486,7 +486,7 @@ func (pm *PtzMixin) MoveUp(ptzOptions ...OptionPtzOperation) func(handler *netwo
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -532,7 +532,7 @@ func (pm *PtzMixin) MoveDown(ptzOptions ...OptionPtzOperation) func(handler *net
 		ptzOperations.Index = nil
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -566,7 +566,7 @@ func (pm *PtzMixin) StopPtz() func(handler *network.RestHandler) (bool,
 
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -599,7 +599,7 @@ func (pm *PtzMixin) AutoMovement() func(handler *network.RestHandler) (bool, err
 
 		payload := ptzOperation(ptzOperations)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err

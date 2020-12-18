@@ -5,7 +5,7 @@ import (
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/api"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/enum"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapigo/pkg"
+	"github.com/ReolinkCameraAPI/reolinkapigo/pkg/reolinkapi"
 	"github.com/jarcoal/httpmock"
 	"io/ioutil"
 	"log"
@@ -171,19 +171,19 @@ func TestRecordingMixin_GetRecordingEncoding(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockGetRecordingEncoding()
 
-	encodingInfo, err := camera.API.GetRecordingEncoding()(camera.RestHandler)
+	encodingInfo, err := camera.GetRecordingEncoding()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -198,19 +198,19 @@ func TestRecordingMixin_GetRecordingAdvanced(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockGetRecordingAdvanced()
 
-	recordingInfo, err := camera.API.GetRecordingAdvanced()(camera.RestHandler)
+	recordingInfo, err := camera.GetRecordingAdvanced()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -225,19 +225,19 @@ func TestRecordingMixin_SetRecordingEncoding(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockSetRecordingEncoding()
 
-	recordingInfo, err := camera.API.SetRecordingEncoding(
+	recordingInfo, err := camera.SetRecordingEncoding(
 		api.RecordingEncodingOptionMainBitRate(enum.MAIN_BIT_RATE_3072),
 		api.RecordingEncodingOptionMainFrameRate(enum.MAIN_FRAME_RATE_8),
 	)(camera.RestHandler)

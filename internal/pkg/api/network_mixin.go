@@ -62,7 +62,7 @@ func (nm *NetworkMixin) SetNetworkPort(networkPortOptions ...NetworkPortOptions)
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "SetNetPort", true)
+		result, err := handler.Request("POST", payload, "SetNetPort")
 
 		if err != nil {
 			return false, err
@@ -98,7 +98,7 @@ func (nm *NetworkMixin) SetWifi(ssid string, password string) func(handler *netw
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "SetWifi", true)
+		result, err := handler.Request("POST", payload, "SetWifi")
 
 		if err != nil {
 			return false, err
@@ -129,7 +129,7 @@ func (nm *NetworkMixin) GetWifi() func(handler *network.RestHandler) (*models.Wi
 			"param": map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "GetWifi", true)
+		result, err := handler.Request("POST", payload, "GetWifi")
 
 		if err != nil {
 			return nil, err
@@ -156,7 +156,7 @@ func (nm *NetworkMixin) ScanWifi() func(handler *network.RestHandler) (*models.S
 			"param": map[string]interface{}{},
 		}
 
-		result, err := handler.Request("POST", payload, "ScanWifi", true)
+		result, err := handler.Request("POST", payload, "ScanWifi")
 
 		if err != nil {
 			return nil, err
@@ -183,7 +183,7 @@ func (nm *NetworkMixin) GetNetworkGeneral() func(handler *network.RestHandler) (
 			"param": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, "GetLocalLink", true)
+		resp, err := handler.Request("POST", payload, "GetLocalLink")
 
 		if err != nil {
 			return nil, err
@@ -210,7 +210,7 @@ func (nm *NetworkMixin) GetNetworkDDNS() func(handler *network.RestHandler) (*mo
 			"param": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, "GetDdns", true)
+		resp, err := handler.Request("POST", payload, "GetDdns")
 
 		if err != nil {
 			return nil, err
@@ -237,7 +237,7 @@ func (nm *NetworkMixin) GetNetworkNTP() func(handler *network.RestHandler) (*mod
 			"param": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, "GetNtp", true)
+		resp, err := handler.Request("POST", payload, "GetNtp")
 
 		if err != nil {
 			return nil, err
@@ -264,7 +264,7 @@ func (nm *NetworkMixin) GetNetworkEmail() func(handler *network.RestHandler) (*m
 			"param": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, "GetEmail", true)
+		resp, err := handler.Request("POST", payload, "GetEmail")
 
 		if err != nil {
 			return nil, err
@@ -291,7 +291,7 @@ func (nm *NetworkMixin) GetNetworkFTP() func(handler *network.RestHandler) (*mod
 			"param": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, "GetFtp", true)
+		resp, err := handler.Request("POST", payload, "GetFtp")
 
 		if err != nil {
 			return nil, err
@@ -318,7 +318,7 @@ func (nm *NetworkMixin) GetNetworkPush() func(handler *network.RestHandler) (*mo
 			"param": map[string]interface{}{},
 		}
 
-		resp, err := handler.Request("POST", payload, "GetPush", true)
+		resp, err := handler.Request("POST", payload, "GetPush")
 
 		if err != nil {
 			return nil, err

@@ -36,7 +36,7 @@ func (rm *RecordingMixin) GetRecordingEncoding() func(handler *network.RestHandl
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "GetEnc", true)
+		result, err := handler.Request("POST", payload, "GetEnc")
 
 		if err != nil {
 			return nil, err
@@ -66,7 +66,7 @@ func (rm *RecordingMixin) GetRecordingAdvanced() func(handler *network.RestHandl
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "GetRec", true)
+		result, err := handler.Request("POST", payload, "GetRec")
 
 		if err != nil {
 			return nil, err
@@ -137,7 +137,7 @@ func (rm *RecordingMixin) SetRecordingEncoding(encodingOptions ...OptionRecordin
 			},
 		}
 
-		result, err := handler.Request("POST", payload, "SetEnc", true)
+		result, err := handler.Request("POST", payload, "SetEnc")
 
 		if err != nil {
 			return false, err

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/enum"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapigo/pkg"
+	"github.com/ReolinkCameraAPI/reolinkapigo/pkg/reolinkapi"
 	"github.com/jarcoal/httpmock"
 	"io/ioutil"
 	"net/http"
@@ -176,19 +176,19 @@ func TestDisplayMixin_GetOSD(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockGetOsd()
 
-	osdInfo, err := camera.API.GetOSD()(camera.RestHandler)
+	osdInfo, err := camera.GetOSD()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -204,19 +204,19 @@ func TestDisplayMixin_GetMask(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockGetMask()
 
-	maskInfo, err := camera.API.GetMask()(camera.RestHandler)
+	maskInfo, err := camera.GetMask()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)
@@ -232,19 +232,19 @@ func TestDisplayMixin_SetOSD(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := pkg.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if camera.RestHandler.Token == "12345" {
+	if camera.GetToken() == "12345" {
 		t.Logf("login successful")
 	}
 
 	registerMockSetOsd()
 
-	ok, err := camera.API.SetOSD()(camera.RestHandler)
+	ok, err := camera.SetOSD()(camera.RestHandler)
 
 	if err != nil {
 		t.Error(err)

@@ -79,7 +79,7 @@ func (zfm *ZoomFocusMixin) StartZoomingIn(zoomOptions ...OptionZoomOperation) fu
 	return func(handler *network.RestHandler) (bool, error) {
 		payload := zoomOperation(zoomOps)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -121,7 +121,7 @@ func (zfm *ZoomFocusMixin) StartZoomingOut(zoomOptions ...OptionZoomOperation) f
 	return func(handler *network.RestHandler) (bool, error) {
 		payload := zoomOperation(zoomOps)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -152,7 +152,7 @@ func (zfm *ZoomFocusMixin) StopZooming() func(handler *network.RestHandler) (boo
 	return func(handler *network.RestHandler) (bool, error) {
 		payload := zoomOperation(zoomOps)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -193,7 +193,7 @@ func (zfm *ZoomFocusMixin) StartFocusingIn(focusOptions ...OptionFocusOperation)
 	return func(handler *network.RestHandler) (bool, error) {
 		payload := focusOperation(focusOps)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -235,7 +235,7 @@ func (zfm *ZoomFocusMixin) StartFocusingOut(focusOptions ...OptionFocusOperation
 	return func(handler *network.RestHandler) (bool, error) {
 		payload := focusOperation(focusOps)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
@@ -268,7 +268,7 @@ func (zfm *ZoomFocusMixin) StopFocusing() func(handler *network.RestHandler) (bo
 
 		payload := focusOperation(focusOps)
 
-		result, err := handler.Request("POST", payload, "PtzCtrl", true)
+		result, err := handler.Request("POST", payload, "PtzCtrl")
 
 		if err != nil {
 			return false, err
