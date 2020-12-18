@@ -1,10 +1,14 @@
 package api
 
 import (
+	"fmt"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/enum"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rtsp"
 	"github.com/deepch/vdk/av"
 )
 
 type RtspMixin struct {
+	Host     string
 	Username string
 	Password string
 }
@@ -12,6 +16,25 @@ type RtspMixin struct {
 type RtspStream struct {
 	Frame []av.CodecData
 	Err   error
+}
+
+func (rm *RtspMixin) OpenRtspStream(profile enum.RtspProfile, rtspOpts ...rtsp.OptionRtspClient) *rtsp.RtspClient {
+	endpoint := fmt.Sprintf("//h264Preview_01_%s", profile.Value())
+
+	opts := []rtsp.OptionRtspClient{
+		rtsp.WithEndpoint(endpoint),
+		rtsp.WithUsername(rm.Username),
+		rtsp.WithPassword(rm.Password),
+	}
+
+	// append external options over internal so that they are overwritten by the external configs.
+	opts = append(opts, rtspOpts...)
+
+	rtspClient := rtsp.NewRtspClient(rm.Host, opts...)
+
+	go rtspClient.OpenStream()
+
+	return rtspClient
 }
 
 // Open an RTSP stream using GoCV (openCv 4)

@@ -1,4 +1,4 @@
-package network
+package rest
 
 type Scheme uint
 

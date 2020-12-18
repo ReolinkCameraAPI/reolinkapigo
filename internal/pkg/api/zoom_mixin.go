@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
 )
 
 type ZoomFocusMixin struct{}
@@ -62,7 +62,7 @@ func focusOperation(focusOperation *focus) interface{} {
 // Zoom in with the camera with optional parameters.
 // Defaults:
 // speed: 60
-func (zfm *ZoomFocusMixin) StartZoomingIn(zoomOptions ...OptionZoomOperation) func(handler *network.RestHandler) (bool,
+func (zfm *ZoomFocusMixin) StartZoomingIn(zoomOptions ...OptionZoomOperation) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	speed := 60
@@ -76,7 +76,7 @@ func (zfm *ZoomFocusMixin) StartZoomingIn(zoomOptions ...OptionZoomOperation) fu
 		op(zoomOps)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := zoomOperation(zoomOps)
 
 		result, err := handler.Request("POST", payload, "PtzCtrl")
@@ -104,7 +104,7 @@ func (zfm *ZoomFocusMixin) StartZoomingIn(zoomOptions ...OptionZoomOperation) fu
 // Zoom out with the camera with optional parameters.
 // Default:
 // speed: 60
-func (zfm *ZoomFocusMixin) StartZoomingOut(zoomOptions ...OptionZoomOperation) func(handler *network.RestHandler) (bool,
+func (zfm *ZoomFocusMixin) StartZoomingOut(zoomOptions ...OptionZoomOperation) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	speed := 60
@@ -118,7 +118,7 @@ func (zfm *ZoomFocusMixin) StartZoomingOut(zoomOptions ...OptionZoomOperation) f
 		op(zoomOps)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := zoomOperation(zoomOps)
 
 		result, err := handler.Request("POST", payload, "PtzCtrl")
@@ -144,12 +144,12 @@ func (zfm *ZoomFocusMixin) StartZoomingOut(zoomOptions ...OptionZoomOperation) f
 }
 
 // Stop zooming
-func (zfm *ZoomFocusMixin) StopZooming() func(handler *network.RestHandler) (bool, error) {
+func (zfm *ZoomFocusMixin) StopZooming() func(handler *rest.RestHandler) (bool, error) {
 	zoomOps := &zoom{
 		operation: "Stop",
 		speed:     nil,
 	}
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := zoomOperation(zoomOps)
 
 		result, err := handler.Request("POST", payload, "PtzCtrl")
@@ -177,7 +177,7 @@ func (zfm *ZoomFocusMixin) StopZooming() func(handler *network.RestHandler) (boo
 // Focus in with the camera with optional parameters.
 // Defaults:
 // speed: 32
-func (zfm *ZoomFocusMixin) StartFocusingIn(focusOptions ...OptionFocusOperation) func(handler *network.RestHandler) (
+func (zfm *ZoomFocusMixin) StartFocusingIn(focusOptions ...OptionFocusOperation) func(handler *rest.RestHandler) (
 	bool, error) {
 	speed := 32
 
@@ -190,7 +190,7 @@ func (zfm *ZoomFocusMixin) StartFocusingIn(focusOptions ...OptionFocusOperation)
 		op(focusOps)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := focusOperation(focusOps)
 
 		result, err := handler.Request("POST", payload, "PtzCtrl")
@@ -218,7 +218,7 @@ func (zfm *ZoomFocusMixin) StartFocusingIn(focusOptions ...OptionFocusOperation)
 // Focus out with the camera with optional parameters.
 // Defaults:
 // speed: 32
-func (zfm *ZoomFocusMixin) StartFocusingOut(focusOptions ...OptionFocusOperation) func(handler *network.RestHandler) (
+func (zfm *ZoomFocusMixin) StartFocusingOut(focusOptions ...OptionFocusOperation) func(handler *rest.RestHandler) (
 	bool, error) {
 
 	speed := 32
@@ -232,7 +232,7 @@ func (zfm *ZoomFocusMixin) StartFocusingOut(focusOptions ...OptionFocusOperation
 		op(focusOps)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := focusOperation(focusOps)
 
 		result, err := handler.Request("POST", payload, "PtzCtrl")
@@ -257,14 +257,14 @@ func (zfm *ZoomFocusMixin) StartFocusingOut(focusOptions ...OptionFocusOperation
 	}
 }
 
-func (zfm *ZoomFocusMixin) StopFocusing() func(handler *network.RestHandler) (bool, error) {
+func (zfm *ZoomFocusMixin) StopFocusing() func(handler *rest.RestHandler) (bool, error) {
 
 	focusOps := &focus{
 		operation: "Stop",
 		speed:     nil,
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 
 		payload := focusOperation(focusOps)
 

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
 )
 
 
@@ -13,8 +13,8 @@ type DeviceMixin struct {
 
 // Get the Camera's HDD information
 // TODO: Better error messages
-func (dm *DeviceMixin) GetHddInfo() func(handler *network.RestHandler) (*models.HddInfo, error) {
-	return func(handler *network.RestHandler) (*models.HddInfo, error) {
+func (dm *DeviceMixin) GetHddInfo() func(handler *rest.RestHandler) (*models.HddInfo, error) {
+	return func(handler *rest.RestHandler) (*models.HddInfo, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetHddInfo",
 			"action": 0,
@@ -45,8 +45,8 @@ func (dm *DeviceMixin) GetHddInfo() func(handler *network.RestHandler) (*models.
 // Format the camera HDD.
 // Default hddId: 0
 // TODO: better error messages
-func (dm *DeviceMixin) FormatHdd(hddId int) func(handler *network.RestHandler) (bool, error) {
-	return func(handler *network.RestHandler) (bool, error) {
+func (dm *DeviceMixin) FormatHdd(hddId int) func(handler *rest.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := map[string]interface{}{
 			"cmd":    "Format",
 			"action": 0,

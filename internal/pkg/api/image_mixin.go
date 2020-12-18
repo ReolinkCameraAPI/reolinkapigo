@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/enum"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
 )
 
 type ImageMixin struct {
@@ -59,7 +59,7 @@ type OptionImageSetting func(*image)
 // rotation:     0,
 // mirroring:    0,
 // nr3d:         1,
-func (im *ImageMixin) SetAdvanceImageSettings(imageAdvancedOptions ...OptionAdvancedImageSetting) func(handler *network.RestHandler) (bool,
+func (im *ImageMixin) SetAdvanceImageSettings(imageAdvancedOptions ...OptionAdvancedImageSetting) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	ias := &imageAdvanced{
@@ -85,7 +85,7 @@ func (im *ImageMixin) SetAdvanceImageSettings(imageAdvancedOptions ...OptionAdva
 		op(ias)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 
 		payload := map[string]interface{}{
 			"cmd":    "SetIsp",
@@ -146,7 +146,7 @@ func (im *ImageMixin) SetAdvanceImageSettings(imageAdvancedOptions ...OptionAdva
 // hue:        1,
 // saturation: 125,
 // sharpness:  128,
-func (im *ImageMixin) SetImageSettings(imageOptions ...OptionImageSetting) func(handler *network.RestHandler) (bool,
+func (im *ImageMixin) SetImageSettings(imageOptions ...OptionImageSetting) func(handler *rest.RestHandler) (bool,
 	error) {
 
 	img := &image{
@@ -161,7 +161,7 @@ func (im *ImageMixin) SetImageSettings(imageOptions ...OptionImageSetting) func(
 		op(img)
 	}
 
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := map[string]interface{}{
 			"cmd":    "SetImage",
 			"action": 0,

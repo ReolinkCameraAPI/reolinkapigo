@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
 	"log"
 )
 
@@ -13,8 +13,8 @@ type AuthMixin struct {
 	Password string
 }
 
-func (am *AuthMixin) Login() func(*network.RestHandler) (bool, error) {
-	return func(handler *network.RestHandler) (bool, error) {
+func (am *AuthMixin) Login() func(*rest.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 
 		payload := map[string]interface{}{
 			"cmd":    "Login",
@@ -53,8 +53,8 @@ func (am *AuthMixin) Login() func(*network.RestHandler) (bool, error) {
 	}
 }
 
-func (am *AuthMixin) Logout() func(handler *network.RestHandler) (bool, error) {
-	return func(handler *network.RestHandler) (bool, error) {
+func (am *AuthMixin) Logout() func(handler *rest.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := map[string]interface{}{
 			"cmd":    "Logout",
 			"action": 0,

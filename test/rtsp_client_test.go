@@ -4,16 +4,14 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/ReolinkCameraAPI/reolinkapigo/examples"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rtsp"
 	"image"
 	"testing"
-	"time"
 )
 
 func TestNewRtspClient(t *testing.T) {
 
-	rtspClient := network.NewRtspClient("rtsp://localhost:8554/mystream", network.RtspClientOptionDebug(true),
-		network.RtspClientOptionRetryCount(1), network.RtspClientOptionTimeout(1*time.Second))
+	rtspClient := rtsp.NewRtspClient("rtsp://localhost:8554/mystream")
 
 	go rtspClient.OpenStream()
 

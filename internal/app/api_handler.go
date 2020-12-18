@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/api"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
 )
 
 type ApiHandler struct {
@@ -17,13 +17,15 @@ type ApiHandler struct {
 	*api.SystemMixin
 	*api.UserMixin
 	*api.ZoomFocusMixin
-	*network.RestHandler
+	*rest.RestHandler
 }
 
-func NewApiHandler(username string, password string, host string, restOpts ...network.OptionRestHandler) (*ApiHandler,
+func NewApiHandler(username string, password string, host string, restOpts ...rest.OptionRestHandler) (*ApiHandler,
 	error) {
 
-	handler := network.NewRestHandler(host, restOpts...)
+	// create a new restHandler inside the apiHandler to manage all the rest network activity
+	// such as injecting the token before a request is made.
+	handler := rest.NewRestHandler(host, restOpts...)
 
 	return &ApiHandler{
 		&api.AuthMixin{
@@ -34,6 +36,7 @@ func NewApiHandler(username string, password string, host string, restOpts ...ne
 		&api.DisplayMixin{},
 		&api.ImageMixin{},
 		&api.RtspMixin{
+			Host:     host,
 			Username: username,
 			Password: password,
 		},

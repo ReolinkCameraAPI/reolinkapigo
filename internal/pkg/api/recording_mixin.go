@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/enum"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
-	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
 )
 
 type RecordingMixin struct{}
@@ -26,8 +26,8 @@ type OptionRecordingEncoding func(*encoding)
 
 // Get the camera's current encoding settings for "Clear" and "Fluent" profiles
 // See examples/response/GetEnc.json for example response data
-func (rm *RecordingMixin) GetRecordingEncoding() func(handler *network.RestHandler) (*models.Encoding, error) {
-	return func(handler *network.RestHandler) (*models.Encoding, error) {
+func (rm *RecordingMixin) GetRecordingEncoding() func(handler *rest.RestHandler) (*models.Encoding, error) {
+	return func(handler *rest.RestHandler) (*models.Encoding, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetEnc",
 			"action": 1,
@@ -56,8 +56,8 @@ func (rm *RecordingMixin) GetRecordingEncoding() func(handler *network.RestHandl
 
 // Get the recoding advanced setup data
 // See examples/response/GetRec.json for example response data
-func (rm *RecordingMixin) GetRecordingAdvanced() func(handler *network.RestHandler) (*models.Recording, error) {
-	return func(handler *network.RestHandler) (*models.Recording, error) {
+func (rm *RecordingMixin) GetRecordingAdvanced() func(handler *rest.RestHandler) (*models.Recording, error) {
+	return func(handler *rest.RestHandler) (*models.Recording, error) {
 		payload := map[string]interface{}{
 			"cmd":    "GetRec",
 			"action": 1,
@@ -97,7 +97,7 @@ func (rm *RecordingMixin) GetRecordingAdvanced() func(handler *network.RestHandl
 // SubFrameRate: 7
 // SubProfile: "High"
 // SubSize: "640*480"
-func (rm *RecordingMixin) SetRecordingEncoding(encodingOptions ...OptionRecordingEncoding) func(handler *network.RestHandler) (bool, error) {
+func (rm *RecordingMixin) SetRecordingEncoding(encodingOptions ...OptionRecordingEncoding) func(handler *rest.RestHandler) (bool, error) {
 	encoding := &encoding{
 		audio:         false,
 		mainBitRate:   8192,
@@ -113,7 +113,7 @@ func (rm *RecordingMixin) SetRecordingEncoding(encodingOptions ...OptionRecordin
 	for _, op := range encodingOptions {
 		op(encoding)
 	}
-	return func(handler *network.RestHandler) (bool, error) {
+	return func(handler *rest.RestHandler) (bool, error) {
 		payload := map[string]interface{}{
 			"cmd":    "SetEnc",
 			"action": 0,
