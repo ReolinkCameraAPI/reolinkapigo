@@ -11,6 +11,7 @@ import (
 type AuthMixin struct {
 	Username string
 	Password string
+	token    string
 }
 
 func (am *AuthMixin) Login() func(*rest.RestHandler) (bool, error) {
@@ -47,6 +48,7 @@ func (am *AuthMixin) Login() func(*rest.RestHandler) (bool, error) {
 			return false, fmt.Errorf("login failed")
 		}
 
+		am.token = tokenData.Name
 		handler.SetToken(tokenData.Name)
 
 		return true, nil
@@ -86,4 +88,11 @@ func (am *AuthMixin) Logout() func(handler *rest.RestHandler) (bool, error) {
 
 		return false, fmt.Errorf("login failed")
 	}
+}
+
+func (am *AuthMixin) IsLoggedIn() bool {
+	if am.token != "" {
+		return true
+	}
+	return false
 }

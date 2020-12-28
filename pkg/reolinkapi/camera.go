@@ -11,6 +11,8 @@ type Camera struct {
 }
 
 type options struct {
+	username    string
+	password    string
 	deferLogin  bool
 	networkOpts []rest.OptionRestHandler
 }
@@ -33,6 +35,18 @@ func (n networkOption) apply(opts *options) {
 	opts.networkOpts = n.networkOpts
 }
 
+type usernameOption string
+
+func (u usernameOption) apply(opts *options) {
+	opts.username = string(u)
+}
+
+type passwordOption string
+
+func (p passwordOption) apply(opts *options) {
+	opts.password = string(p)
+}
+
 func WithDeferLogin(deferLogin bool) OptionCamera {
 	return deferLoginOption(deferLogin)
 }
@@ -41,19 +55,37 @@ func WithNetworkOptions(networkOpts ...rest.OptionRestHandler) OptionCamera {
 	return networkOption{networkOpts}
 }
 
-func NewCamera(username string, password string, ip string, opts ...OptionCamera) (
+func WithUsername(username string) OptionCamera {
+	return usernameOption(username)
+}
+
+func WithPassword(password string) OptionCamera {
+	return passwordOption(password)
+}
+
+// Create a new camera object
+// IP is required. Username and Password will fallback to camera defaults.
+// To change the network options such as connecting to a camera behind a proxy, pass the networkOpts parameter
+// Defaults:
+// Username: "admin"
+// Password: ""
+// deferLogin: false
+// networkOpts: nil
+func NewCamera(ip string, opts ...OptionCamera) (
 	*Camera, error) {
 
 	options := options{
 		deferLogin:  false,
 		networkOpts: nil,
+		username:    "admin",
+		password:    "",
 	}
 
 	for _, o := range opts {
 		o.apply(&options)
 	}
 
-	apiHandler, err := app.NewApiHandler(username, password, ip, options.networkOpts...)
+	apiHandler, err := app.NewApiHandler(options.username, options.password, ip, options.networkOpts...)
 
 	if err != nil {
 		return nil, err
@@ -75,6 +107,6 @@ func NewCamera(username string, password string, ip string, opts ...OptionCamera
 	}
 
 	return &Camera{
-		ApiHandler:  apiHandler,
+		ApiHandler: apiHandler,
 	}, nil
 }
