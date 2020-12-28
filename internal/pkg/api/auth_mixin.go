@@ -90,9 +90,3 @@ func (am *AuthMixin) Logout() func(handler *rest.RestHandler) (bool, error) {
 	}
 }
 
-func (am *AuthMixin) IsLoggedIn() bool {
-	if am.token != "" {
-		return true
-	}
-	return false
-}

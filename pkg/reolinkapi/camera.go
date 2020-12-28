@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/app"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
+	"golang.org/x/net/context"
+	"time"
 )
 
 type Camera struct {
@@ -106,7 +108,41 @@ func NewCamera(ip string, opts ...OptionCamera) (
 		}
 	}
 
-	return &Camera{
+	camera := &Camera{
 		ApiHandler: apiHandler,
-	}, nil
+	}
+
+	return camera, nil
+}
+
+// Auto refresh
+func (c *Camera) AutoRefreshToken(ctx context.Context) chan error {
+	err := make(chan error)
+	go func() {
+		for {
+			if c.IsLoggedIn() {
+				ok, e := c.IsTokenValid()
+				if err != nil {
+					err <- e
+					return
+				}
+				if !ok {
+					_, e := c.Login()(c.RestHandler)
+
+					if e != nil {
+						err <- e
+					}
+				}
+			}
+
+			select {
+			case <-ctx.Done():
+				return // terminate goroutine
+			default: // avoid blocking
+			}
+			time.Sleep(time.Minute * 5)
+		}
+	}()
+
+	return err
 }

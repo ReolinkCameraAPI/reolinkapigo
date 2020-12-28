@@ -5,10 +5,12 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/net/proxy"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 var (
@@ -323,10 +325,48 @@ func (rh *RestHandler) Request(method string, payload interface{}, command strin
 	return result[0], nil
 }
 
+// Set the current token
 func (rh *RestHandler) SetToken(token string) {
 	rh.token = token
 }
 
+// Get the current token
 func (rh *RestHandler) GetToken() string {
 	return rh.token
+}
+
+// Check if there is a token
+func (rh *RestHandler) IsLoggedIn() bool {
+	if rh.token != "" {
+		return true
+	}
+	return false
+}
+
+// Check if the token is valid
+// Will return true if valid
+func (rh *RestHandler) IsTokenValid() (bool, error) {
+	claims := jwt.StandardClaims{}
+	token, err := jwt.ParseWithClaims(rh.token, claims, func(token *jwt.Token) (interface{}, error) {
+		return token, nil
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	if !token.Valid {
+		return false, nil
+	}
+
+	tm := time.Unix(claims.ExpiresAt, 0)
+	remainder := tm.Sub(time.Now())
+
+	remaining := remainder.Seconds()
+
+	if remaining <= 0 {
+		return false, nil
+	}
+
+	return true, nil
 }
