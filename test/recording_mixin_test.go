@@ -171,7 +171,7 @@ func TestRecordingMixin_GetRecordingEncoding(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -198,7 +198,7 @@ func TestRecordingMixin_GetRecordingAdvanced(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -225,7 +225,7 @@ func TestRecordingMixin_SetRecordingEncoding(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
