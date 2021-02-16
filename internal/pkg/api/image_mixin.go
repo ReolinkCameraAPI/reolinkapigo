@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/enum"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
+	"net/url"
 )
 
 type ImageMixin struct {
@@ -196,6 +197,22 @@ func (im *ImageMixin) SetImageSettings(imageOptions ...OptionImageSetting) func(
 		}
 
 		return false, fmt.Errorf("camera could not set image settings. camera responded with %v", result.Value)
+	}
+}
+
+func (im *ImageMixin) Snap() func(handler *rest.RestHandler) ([]byte, error) {
+	return func(handler *rest.RestHandler) ([]byte, error) {
+		params := url.Values{}
+		params.Add("cmd", "Snap")
+		params.Add("channel", "0")
+
+		snapshot, err := handler.RequestRaw("GET", "", params)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return snapshot, nil
 	}
 }
 

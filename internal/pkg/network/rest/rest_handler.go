@@ -182,6 +182,27 @@ func NewRestHandler(host string, opts ...OptionRestHandler) *RestHandler {
 // auth: alters the request to include auth token on true
 func (rh *RestHandler) Request(method string, payload interface{}, command string) (*GeneralData, error) {
 
+	params := url.Values{}
+	params.Add("cmd", command)
+
+	respBody, err := rh.RequestRaw(method, payload, params)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var result []*GeneralData
+
+	err = json.Unmarshal(respBody, &result)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result[0], nil
+}
+
+func (rh *RestHandler) RequestRaw(method string, payload interface{}, params url.Values) ([]byte, error) {
 	var urlConcat string
 	if rh.port > 0 {
 		urlConcat = fmt.Sprintf("%s:%d/%s", rh.host, rh.port, rh.endpoint)
@@ -191,13 +212,11 @@ func (rh *RestHandler) Request(method string, payload interface{}, command strin
 
 	urlConcat = fmt.Sprintf("%s://%s", rh.scheme.String(), urlConcat)
 
-	var data []byte
-
-	params := url.Values{}
 	params.Add("token", rh.token)
-	params.Add("cmd", command)
 
 	urlConcat = fmt.Sprintf("%s?%s", urlConcat, params.Encode())
+
+	var data []byte
 
 	data, err := json.Marshal([]interface{}{payload})
 
@@ -309,20 +328,13 @@ func (rh *RestHandler) Request(method string, payload interface{}, command strin
 		return nil, err
 	}
 
-	var result []*GeneralData
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
 		return nil, err
 	}
 
-	err = json.Unmarshal(body, &result)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return result[0], nil
+	return body, nil
 }
 
 // Set the current token
