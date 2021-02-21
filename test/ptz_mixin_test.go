@@ -3,6 +3,7 @@ package test
 import (
 	"encoding/json"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/api"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
 	"github.com/ReolinkCameraAPI/reolinkapigo/pkg/reolinkapi"
 	"github.com/jarcoal/httpmock"
 	"io/ioutil"
@@ -10,6 +11,63 @@ import (
 	"net/http"
 	"testing"
 )
+
+func registerMockGetPreset() {
+	httpmock.RegisterResponder("POST", "http://127.0.0.1/cgi-bin/api.cgi",
+		func(req *http.Request) (*http.Response, error) {
+
+			type ReqData struct {
+				Cmd    string                     `json:"cmd"`
+				Action int                        `json:"action"`
+				Param  map[string]json.RawMessage `json:"param"`
+			}
+
+			// check the username and password
+			var reqData []*ReqData
+
+			data, err := ioutil.ReadAll(req.Body)
+
+			if err != nil {
+				return httpmock.NewStringResponse(500, err.Error()), nil
+			}
+
+			err = json.Unmarshal(data, &reqData)
+
+			if err != nil {
+				return httpmock.NewStringResponse(500, err.Error()), nil
+			}
+
+			cmd := reqData[0].Cmd
+
+			log.Printf("received cmd %s", cmd)
+
+			presets := make([]*models.PtzPreset, 2)
+			presets[0] = &models.PtzPreset{
+				Channel: 0,
+				Enable:  1,
+				Index:   1,
+				Name:    "pos1",
+			}
+			presets[1] = &models.PtzPreset{
+				Channel: 0,
+				Enable:  0,
+				Index:   1,
+				Name:    "pos2",
+			}
+
+			generalData := map[string]interface{}{
+				"cmd":  "GetPtzPreset",
+				"code": 0,
+				"value": map[string]interface{}{
+					"PtzPreset": presets,
+				},
+			}
+
+			return httpmock.NewJsonResponse(200, []interface{}{generalData})
+
+		},
+	)
+}
 
 func registerMockGoToPreset() {
 	httpmock.RegisterResponder("POST", "http://127.0.0.1/cgi-bin/api.cgi",
@@ -183,13 +241,44 @@ func registerMockPtzOperation() {
 	)
 }
 
+func TestPtzMixin_GetPreset(t *testing.T)  {
+	httpmock.Activate()
+
+	defer httpmock.DeactivateAndReset()
+
+	registerMockAuth()
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if camera.GetToken() == "12345" {
+		t.Logf("login successful")
+	}
+
+	registerMockGetPreset()
+
+	preset, err := camera.GetPreset()(camera.RestHandler)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(preset) != 1 || preset["pos1"] != 1 {
+		t.Errorf("Get unexpected presets")
+	}
+
+	t.Log("GetPreset successfully")
+}
+
 func TestPtzMixin_GoToPreset(t *testing.T) {
 	httpmock.Activate()
 
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -216,7 +305,7 @@ func TestPtzMixin_AddPreset(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -243,7 +332,7 @@ func TestPtzMixin_RemovePreset(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -271,7 +360,7 @@ func TestPtzMixin_MoveRight(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -298,7 +387,7 @@ func TestPtzMixin_MoveRightUp(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -325,7 +414,7 @@ func TestPtzMixin_MoveRightDown(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -352,7 +441,7 @@ func TestPtzMixin_MoveLeft(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -379,7 +468,7 @@ func TestPtzMixin_MoveLeftUp(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -406,7 +495,7 @@ func TestPtzMixin_MoveLeftDown(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -433,7 +522,7 @@ func TestPtzMixin_MoveUp(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -460,7 +549,7 @@ func TestPtzMixin_MoveDown(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -487,7 +576,7 @@ func TestPtzMixin_StopPtz(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -514,7 +603,7 @@ func TestPtzMixin_AutoMovement(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)

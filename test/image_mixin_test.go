@@ -116,7 +116,8 @@ func TestImageMixin_SetAdvanceImageSettings(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -148,7 +149,8 @@ func TestImageMixin_SetImageSettings(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)

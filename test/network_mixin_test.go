@@ -504,7 +504,7 @@ func TestNetworkMixin_SetNetworkPort(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -531,7 +531,7 @@ func TestNetworkMixin_SetWifi(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -559,7 +559,7 @@ func TestNetworkMixin_GetWifi(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -587,7 +587,7 @@ func TestNetworkMixin_ScanWifi(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -614,7 +614,7 @@ func TestNetworkMixin_GetNetworkGeneral(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -642,7 +642,7 @@ func TestNetworkMixin_GetNetworkDDNS(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -666,7 +666,7 @@ func TestNetworkMixin_GetNetworkNTP(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -690,7 +690,7 @@ func TestNetworkMixin_GetNetworkEmail(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -714,7 +714,7 @@ func TestNetworkMixin_GetNetworkFTP(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -738,7 +738,7 @@ func TestNetworkMixin_GetNetworkPush(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -762,7 +762,7 @@ func TestNetworkMixin_GetNetworkStatus(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)

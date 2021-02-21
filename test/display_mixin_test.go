@@ -176,7 +176,7 @@ func TestDisplayMixin_GetOSD(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -204,7 +204,7 @@ func TestDisplayMixin_GetMask(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -232,7 +232,7 @@ func TestDisplayMixin_SetOSD(t *testing.T) {
 
 	registerMockAuth()
 
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)

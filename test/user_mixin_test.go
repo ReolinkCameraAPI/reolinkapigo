@@ -271,7 +271,7 @@ func TestUserMixin_GetOnlineUsers(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -300,7 +300,7 @@ func TestUserMixin_GetUsers(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -329,7 +329,7 @@ func TestUserMixin_AddUser(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -356,7 +356,7 @@ func TestUserMixin_UpdateUserPassword(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)
@@ -383,7 +383,7 @@ func TestUserMixin_DeleteUser(t *testing.T) {
 	defer httpmock.DeactivateAndReset()
 
 	registerMockAuth()
-	camera, err := reolinkapi.NewCamera("foo", "bar", "127.0.0.1")
+	camera, err := reolinkapi.NewCamera("127.0.0.1", reolinkapi.WithUsername("foo"), reolinkapi.WithPassword("bar"))
 
 	if err != nil {
 		t.Error(err)

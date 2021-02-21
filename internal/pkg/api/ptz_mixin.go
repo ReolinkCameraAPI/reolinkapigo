@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/models"
 	"github.com/ReolinkCameraAPI/reolinkapigo/internal/pkg/network/rest"
 )
 
@@ -57,6 +58,41 @@ func ptzOperation(ptzOperation *ptzOperationOptions) interface{} {
 		"cmd":    "PtzCtrl",
 		"action": 0,
 		"param":  param,
+	}
+}
+
+func (pm *PtzMixin) GetPreset() func(handler *rest.RestHandler) (map[string]int, error) {
+	return func(handler *rest.RestHandler) (map[string]int, error) {
+		payload := map[string]interface{}{
+			"cmd":    "GetPtzPreset",
+			"action": 1,
+			"param": map[string]interface{}{
+				"channel": 0,
+			},
+		}
+		result, err := handler.Request("POST", payload, "GetPtzPreset")
+
+		if err != nil {
+			return map[string]int{}, err
+		}
+
+		var presets []*models.PtzPreset
+
+		err = json.Unmarshal(result.Value["PtzPreset"], &presets)
+
+		presetMap := make(map[string]int, 2)
+
+		if err != nil {
+			return presetMap, err
+		}
+
+		for _, p := range presets {
+			if p.Enable == 1 {
+				presetMap[p.Name] = p.Index
+			}
+		}
+
+		return presetMap, nil
 	}
 }
 
