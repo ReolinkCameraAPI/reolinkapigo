@@ -60,10 +60,10 @@ GO111MODULE=on go get -u github.com/ReolinkCameraAPI/reolinkapigo@v0.0.2
 
 ### From source
 
-cd $GOPATH
-mkdir -p src/github.com/ReolinkCameraAPI
-cd src/github.com/ReolinkCameraAPI
-git clone https://github.com/ReolinkCameraAPI/reolinkapigo.git
+    cd $GOPATH
+    mkdir -p src/github.com/ReolinkCameraAPI
+    cd src/github.com/ReolinkCameraAPI
+    git clone https://github.com/ReolinkCameraAPI/reolinkapigo.git
 
 ## Usage
 
