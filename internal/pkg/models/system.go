@@ -70,7 +70,9 @@ func (d *DeviceInformation) UnmarshalJSON(b []byte) error {
 		Wifi            int    `json:"wifi"`
 	}
 
+	// try to unmarshal with wifi as an int
 	if err := json.Unmarshal(b, &deviceInformation); err != nil {
+		// if it fails to parse because the value is not an int
 		var deviceInfo struct {
 			B485            int    `json:"B485"`
 			IoInputNumber   int    `json:"IOInputNum"`
@@ -89,12 +91,17 @@ func (d *DeviceInformation) UnmarshalJSON(b []byte) error {
 			Type            string `json:"type"`
 			Wifi            bool   `json:"wifi"`
 		}
+
 		if err := json.Unmarshal(b, &deviceInfo); err != nil {
+			// return the error if neither an int or bool
 			return err
 		} else {
+			// set wifi value to wifi status
 			d.Wifi = deviceInfo.Wifi
 		}
 	} else {
+		// if wifi was an int
+		// set wifi value to wifi status
 		switch deviceInformation.Wifi {
 		case 1:
 			d.Wifi = true
@@ -103,6 +110,7 @@ func (d *DeviceInformation) UnmarshalJSON(b []byte) error {
 		}
 	}
 
+	// set the rest of the values as expected.
 	d.B485 = deviceInformation.B485
 	d.IoInputNumber = deviceInformation.IoInputNumber
 	d.IoOutputNumber = deviceInformation.IoOutputNumber
@@ -118,6 +126,7 @@ func (d *DeviceInformation) UnmarshalJSON(b []byte) error {
 	d.Serial = deviceInformation.Serial
 	d.Type = deviceInformation.Type
 
+	// return values
 	return nil
 }
 
