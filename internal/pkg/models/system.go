@@ -92,30 +92,15 @@ func (d *DeviceInformation) UnmarshalJSON(b []byte) error {
 		if err := json.Unmarshal(b, &deviceInfo); err != nil {
 			return err
 		} else {
-			d.B485 = deviceInfo.B485
-			d.IoInputNumber = deviceInfo.IoInputNumber
-			d.IoOutputNumber = deviceInfo.IoOutputNumber
-			d.AudioNumber = deviceInfo.AudioNumber
-			d.BuildDay = deviceInfo.BuildDay
-			d.ConfigVersion = deviceInfo.ConfigVersion
-			d.ChannelNumber = deviceInfo.ChannelNumber
-			d.DiskNumber = deviceInfo.DiskNumber
-			d.FirmwareVersion = deviceInfo.FirmwareVersion
-			d.HardwareVersion = deviceInfo.HardwareVersion
-			d.Model = deviceInfo.Model
-			d.Name = deviceInfo.Name
-			d.Serial = deviceInfo.Serial
-			d.Type = deviceInfo.Type
 			d.Wifi = deviceInfo.Wifi
-			return nil
 		}
-	}
-
-	switch deviceInformation.Wifi {
-	case 1:
-		d.Wifi = true
-	default:
-		d.Wifi = false
+	} else {
+		switch deviceInformation.Wifi {
+		case 1:
+			d.Wifi = true
+		default:
+			d.Wifi = false
+		}
 	}
 
 	d.B485 = deviceInformation.B485
