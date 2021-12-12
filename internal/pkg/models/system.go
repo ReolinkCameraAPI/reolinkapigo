@@ -1,5 +1,7 @@
 package models
 
+import "encoding/json"
+
 type DstInformation struct {
 	Enable       bool `json:"enable"`
 	EndHour      int  `json:"endHour"`
@@ -46,6 +48,86 @@ type DeviceInformation struct {
 	Serial          string `json:"serial"`
 	Type            string `json:"type"`
 	Wifi            bool   `json:"wifi"`
+}
+
+func (d *DeviceInformation) UnmarshalJSON(b []byte) error {
+	var deviceInformation struct {
+		B485            int    `json:"B485"`
+		IoInputNumber   int    `json:"IOInputNum"`
+		IoOutputNumber  int    `json:"IOOutputNum"`
+		AudioNumber     int    `json:"AudioNum"`
+		BuildDay        string `json:"buildDay"`
+		ConfigVersion   string `json:"cfgVer"`
+		ChannelNumber   int    `json:"channelNum"`
+		Detail          string `json:"detail"`
+		DiskNumber      int    `json:"diskNum"`
+		FirmwareVersion string `json:"firmVer"`
+		HardwareVersion string `json:"hardVer"`
+		Model           string `json:"model"`
+		Name            string `json:"name"`
+		Serial          string `json:"serial"`
+		Type            string `json:"type"`
+		Wifi            int    `json:"wifi"`
+	}
+
+	// try to unmarshal with wifi as an int
+	if err := json.Unmarshal(b, &deviceInformation); err != nil {
+		// if it fails to parse because the value is not an int
+		var deviceInfo struct {
+			B485            int    `json:"B485"`
+			IoInputNumber   int    `json:"IOInputNum"`
+			IoOutputNumber  int    `json:"IOOutputNum"`
+			AudioNumber     int    `json:"AudioNum"`
+			BuildDay        string `json:"buildDay"`
+			ConfigVersion   string `json:"cfgVer"`
+			ChannelNumber   int    `json:"channelNum"`
+			Detail          string `json:"detail"`
+			DiskNumber      int    `json:"diskNum"`
+			FirmwareVersion string `json:"firmVer"`
+			HardwareVersion string `json:"hardVer"`
+			Model           string `json:"model"`
+			Name            string `json:"name"`
+			Serial          string `json:"serial"`
+			Type            string `json:"type"`
+			Wifi            bool   `json:"wifi"`
+		}
+
+		if err := json.Unmarshal(b, &deviceInfo); err != nil {
+			// return the error if neither an int or bool
+			return err
+		} else {
+			// set wifi value to wifi status
+			d.Wifi = deviceInfo.Wifi
+		}
+	} else {
+		// if wifi was an int
+		// set wifi value to wifi status
+		switch deviceInformation.Wifi {
+		case 1:
+			d.Wifi = true
+		default:
+			d.Wifi = false
+		}
+	}
+
+	// set the rest of the values as expected.
+	d.B485 = deviceInformation.B485
+	d.IoInputNumber = deviceInformation.IoInputNumber
+	d.IoOutputNumber = deviceInformation.IoOutputNumber
+	d.AudioNumber = deviceInformation.AudioNumber
+	d.BuildDay = deviceInformation.BuildDay
+	d.ConfigVersion = deviceInformation.ConfigVersion
+	d.ChannelNumber = deviceInformation.ChannelNumber
+	d.DiskNumber = deviceInformation.DiskNumber
+	d.FirmwareVersion = deviceInformation.FirmwareVersion
+	d.HardwareVersion = deviceInformation.HardwareVersion
+	d.Model = deviceInformation.Model
+	d.Name = deviceInformation.Name
+	d.Serial = deviceInformation.Serial
+	d.Type = deviceInformation.Type
+
+	// return values
+	return nil
 }
 
 type DevicePerformanceInformation struct {
